@@ -25,6 +25,7 @@ Authors@R: c(
 Depends:
   R (>= 3.5.0)
 Imports:
+  bookdown (>= 0.21),
   tarchetypes (>= 0.0.0.9001),
   targets (>= 0.0.0.9003),
 Suggests:
