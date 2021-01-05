@@ -1,17 +1,13 @@
-book_filename: "targets-manual"
-repo: "https://wlandau.github.io/targets-manual"
+book_filename: "targets-design"
+repo: "https://wlandau.github.io/targets-design"
 language:
   ui:
     chapter_name: "Chapter "
 delete_merged_file: true
 rmd_files: [
   "index.Rmd",
-  "walkthrough.Rmd",
-  "practice.Rmd",
-  "files.Rmd",
-  "dynamic.Rmd",
-  "static.Rmd",
-  "hpc.Rmd",
-  "cloud.Rmd",
-  "drake.Rmd"
+  "data.Rmd",
+  "classes.Rmd",
+  "composition.Rmd",
+  "orchestration.Rmd"
 ]

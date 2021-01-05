@@ -1,4 +1,4 @@
-# Design documents of targets
+# targets R package developer documentation
 
 [![ropensci](https://badges.ropensci.org/401_status.svg)](https://github.com/ropensci/software-review/issues/401)
 [![zenodo](https://zenodo.org/badge/273058618.svg)](https://zenodo.org/badge/latestdoi/273058618)
