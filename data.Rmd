@@ -66,7 +66,7 @@ These fields are pipe-separated in the flat file. Fields `path` and `children` c
 
 ## Skipping up-to-date targets
 
-`targets` uses the metadata to decide if a target is up to date. The `should_run()` method of the `builder` class manages this. A target is outdated if one of the following conditions is met. `targets` checks these rules in the order given above. There is a special `cue` class to allow the user to customize / suppress most of these rules.
+`targets` uses the metadata to decide if a target is up to date. The `should_run()` method of the `builder` class manages this. A target is outdated if one of the following conditions is met. `targets` checks these rules in the order given below. There is a special `cue` class to allow the user to customize / suppress most of these rules.
 
 1. There is no metadata record of the target.
 1. The target errored last run.
