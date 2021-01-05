@@ -4,7 +4,7 @@
 #'   borrows R package infrastructure for devops purposes.
 #' @return Nothing.
 #' @examples
-#' targets_manual_empty()
-targets_manual_empty <- function() {
+#' targets_design_empty()
+targets_design_empty <- function() {
   invisible()
 }

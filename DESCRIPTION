@@ -1,20 +1,15 @@
-Package: targets.manual
-Title: Targets R Package User Manual
-Description: This repository is the targets R package user manual.
-  It contains in-depth discussion and walkthroughs
-  of the main features of 'targets' and advice about best practices.
-  The goal is to introduce new users to 'targets' and instill
-  a thorough understanding of what it does, how it works,
-  and when to use it. The manual is implemented as a typical
-  'bookdown' project with a single '_bookdown.yml' file at the top level
-  and one R Markdown source file for each chapter. End users
-  are encouraged to read the rendered output at
-  <https://wlandau.github.io/targets-manual>.
+Package: targets.design
+Title: Targets R Package Design Documents
+Description: This repository contains the design documents of the 'targets' R package.
+  These specifications describe the internal architecture, the data storage model,
+  and the orchestration and branching model. The goal is to help developers contribute
+  to core elements of the package.
+  The rendered output lives at <https://wlandau.github.io/targets-design>.
 Version: 0.0.0.9000
 License: MIT + file LICENSE
-URL: https://wlandau.github.io/targets-manual,
-  https://github.com/wlandau/targets-manual
-BugReports: https://github.com/wlandau/targets-manual/issues
+URL: https://wlandau.github.io/targets-design,
+  https://github.com/wlandau/targets-design
+BugReports: https://github.com/wlandau/targets-design/issues
 Authors@R: c(
   person(
     given = c("William", "Michael"),
@@ -30,15 +25,8 @@ Authors@R: c(
 Depends:
   R (>= 3.5.0)
 Imports:
-  biglm (>= 0.9.2),
-  bookdown (>= 0.19),
-  fs (>= 1.4.1),
-  purrr (>= 0.3.4),
   tarchetypes (>= 0.0.0.9001),
   targets (>= 0.0.0.9003),
-  tidyverse (>= 1.3.0),
-  visNetwork (>= 2.0.9),
-  withr (>= 2.2.0)
 Suggests:
   knitr (>= 1.30),
   rmarkdown (>= 2.4),
@@ -49,5 +37,5 @@ Remotes:
 Encoding: UTF-8
 Language: en-US
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.1.1.9000
+RoxygenNote: 7.1.1
 VignetteBuilder: knitr

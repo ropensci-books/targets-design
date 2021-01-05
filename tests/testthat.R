@@ -1,4 +1,4 @@
 library(testthat)
-library(targets.manual)
+library(targets.design)
 
-test_check("targets.manual")
+test_check("targets.design")
