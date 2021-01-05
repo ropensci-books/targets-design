@@ -3,8 +3,8 @@ Title: Targets R Package Design Documents
 Description: This repository contains the design documents of the 'targets' R package.
   These specifications describe the internal architecture, the data storage model,
   and the orchestration and branching model. The goal is to help developers contribute
-  to core elements of the package.
-  The rendered output lives at <https://wlandau.github.io/targets-design>.
+  to core elements of the package. The rendered output lives at
+  <https://wlandau.github.io/targets-design>.
 Version: 0.0.0.9000
 License: MIT + file LICENSE
 URL: https://wlandau.github.io/targets-design,
