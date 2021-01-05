@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 3 Major internal classes | The targets R Package Developer Documentation</title>
+  <meta name="description" content="In-depth discussion of the major functionality of targets." />
+  <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 3 Major internal classes | The targets R Package Developer Documentation" />
+  <meta property="og:type" content="book" />
+  <meta property="og:url" content="https://wlandau.github.io/targets-design" />
+  <meta property="og:image" content="https://wlandau.github.io/targets-design/man/figures/logo.png" />
+  <meta property="og:description" content="In-depth discussion of the major functionality of targets." />
+  <meta name="github-repo" content="wlandau/targets-design" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 3 Major internal classes | The targets R Package Developer Documentation" />
+  
+  <meta name="twitter:description" content="In-depth discussion of the major functionality of targets." />
+  <meta name="twitter:image" content="https://wlandau.github.io/targets-design/man/figures/logo.png" />
+
+<meta name="author" content="Will Landau" />
+<meta name="author" content="Copyright Eli Lilly and Company" />
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  <link rel="apple-touch-icon-precomposed" sizes="120x120" href="man/figures/apple-touch-icon.png" />
+  <link rel="shortcut icon" href="man/figures/favicon.ico" type="image/x-icon" />
+<link rel="prev" href="data.html"/>
+<link rel="next" href="composition.html"/>
+<script src="libs/header-attrs-2.6/header-attrs.js"></script>
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-150843595-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-150843595-1');
+</script>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Introduction</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#design-1"><i class="fa fa-check"></i><b>1.1</b> Design</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="data.html"><a href="data.html"><i class="fa fa-check"></i><b>2</b> Data and metadata management</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="data.html"><a href="data.html#file-system"><i class="fa fa-check"></i><b>2.1</b> File system</a></li>
+<li class="chapter" data-level="2.2" data-path="data.html"><a href="data.html#targets"><i class="fa fa-check"></i><b>2.2</b> Targets</a></li>
+<li class="chapter" data-level="2.3" data-path="data.html"><a href="data.html#progress"><i class="fa fa-check"></i><b>2.3</b> Progress</a></li>
+<li class="chapter" data-level="2.4" data-path="data.html"><a href="data.html#metadata"><i class="fa fa-check"></i><b>2.4</b> Metadata</a></li>
+<li class="chapter" data-level="2.5" data-path="data.html"><a href="data.html#skipping-up-to-date-targets"><i class="fa fa-check"></i><b>2.5</b> Skipping up-to-date targets</a></li>
+<li class="chapter" data-level="2.6" data-path="data.html"><a href="data.html#databases"><i class="fa fa-check"></i><b>2.6</b> Databases</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="classes.html"><a href="classes.html"><i class="fa fa-check"></i><b>3</b> Major internal classes</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="classes.html"><a href="classes.html#algorithm-class"><i class="fa fa-check"></i><b>3.1</b> Algorithm class</a></li>
+<li class="chapter" data-level="3.2" data-path="classes.html"><a href="classes.html#pipeline-class"><i class="fa fa-check"></i><b>3.2</b> Pipeline class</a></li>
+<li class="chapter" data-level="3.3" data-path="classes.html"><a href="classes.html#scheduler-class"><i class="fa fa-check"></i><b>3.3</b> Scheduler class</a></li>
+<li class="chapter" data-level="3.4" data-path="classes.html"><a href="classes.html#graph-class"><i class="fa fa-check"></i><b>3.4</b> Graph class</a></li>
+<li class="chapter" data-level="3.5" data-path="classes.html"><a href="classes.html#progress-class"><i class="fa fa-check"></i><b>3.5</b> Progress class</a></li>
+<li class="chapter" data-level="3.6" data-path="classes.html"><a href="classes.html#queue-class"><i class="fa fa-check"></i><b>3.6</b> Queue class</a></li>
+<li class="chapter" data-level="3.7" data-path="classes.html"><a href="classes.html#counter-class"><i class="fa fa-check"></i><b>3.7</b> Counter class</a></li>
+<li class="chapter" data-level="3.8" data-path="classes.html"><a href="classes.html#target-class"><i class="fa fa-check"></i><b>3.8</b> Target class</a></li>
+<li class="chapter" data-level="3.9" data-path="classes.html"><a href="classes.html#stem-class"><i class="fa fa-check"></i><b>3.9</b> Stem class</a></li>
+<li class="chapter" data-level="3.10" data-path="classes.html"><a href="classes.html#bud-class"><i class="fa fa-check"></i><b>3.10</b> Bud class</a></li>
+<li class="chapter" data-level="3.11" data-path="classes.html"><a href="classes.html#pattern-class"><i class="fa fa-check"></i><b>3.11</b> Pattern class</a></li>
+<li class="chapter" data-level="3.12" data-path="classes.html"><a href="classes.html#branch-class"><i class="fa fa-check"></i><b>3.12</b> Branch class</a></li>
+<li class="chapter" data-level="3.13" data-path="classes.html"><a href="classes.html#builder-class"><i class="fa fa-check"></i><b>3.13</b> Builder class</a></li>
+<li class="chapter" data-level="3.14" data-path="classes.html"><a href="classes.html#junction-class"><i class="fa fa-check"></i><b>3.14</b> Junction class</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="composition.html"><a href="composition.html"><i class="fa fa-check"></i><b>4</b> The composition of target objects</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="composition.html"><a href="composition.html#overall-structure"><i class="fa fa-check"></i><b>4.1</b> Overall structure</a></li>
+<li class="chapter" data-level="4.2" data-path="composition.html"><a href="composition.html#classes-1"><i class="fa fa-check"></i><b>4.2</b> Classes</a>
+<ul>
+<li class="chapter" data-level="4.2.1" data-path="composition.html"><a href="composition.html#command-class"><i class="fa fa-check"></i><b>4.2.1</b> Command class</a></li>
+<li class="chapter" data-level="4.2.2" data-path="composition.html"><a href="composition.html#settings-class"><i class="fa fa-check"></i><b>4.2.2</b> Settings class</a></li>
+<li class="chapter" data-level="4.2.3" data-path="composition.html"><a href="composition.html#cache-class"><i class="fa fa-check"></i><b>4.2.3</b> Cache class</a></li>
+<li class="chapter" data-level="4.2.4" data-path="composition.html"><a href="composition.html#memory-class"><i class="fa fa-check"></i><b>4.2.4</b> Memory class</a></li>
+<li class="chapter" data-level="4.2.5" data-path="composition.html"><a href="composition.html#value-class"><i class="fa fa-check"></i><b>4.2.5</b> Value class</a></li>
+</ul></li>
+<li class="chapter" data-level="4.3" data-path="composition.html"><a href="composition.html#metrics-class"><i class="fa fa-check"></i><b>4.3</b> Metrics class</a>
+<ul>
+<li class="chapter" data-level="4.3.1" data-path="composition.html"><a href="composition.html#store-class"><i class="fa fa-check"></i><b>4.3.1</b> Store class</a></li>
+<li class="chapter" data-level="4.3.2" data-path="composition.html"><a href="composition.html#file-class"><i class="fa fa-check"></i><b>4.3.2</b> File class</a></li>
+<li class="chapter" data-level="4.3.3" data-path="composition.html"><a href="composition.html#subpipeline"><i class="fa fa-check"></i><b>4.3.3</b> Subpipeline</a></li>
+<li class="chapter" data-level="4.3.4" data-path="composition.html"><a href="composition.html#junction-class-1"><i class="fa fa-check"></i><b>4.3.4</b> Junction class</a></li>
+<li class="chapter" data-level="4.3.5" data-path="composition.html"><a href="composition.html#pedigree-class"><i class="fa fa-check"></i><b>4.3.5</b> Pedigree class</a></li>
+<li class="chapter" data-level="4.3.6" data-path="composition.html"><a href="composition.html#cue-class"><i class="fa fa-check"></i><b>4.3.6</b> Cue class</a></li>
+<li class="chapter" data-level="4.3.7" data-path="composition.html"><a href="composition.html#patternview-class"><i class="fa fa-check"></i><b>4.3.7</b> Patternview class</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="orchestration.html"><a href="orchestration.html"><i class="fa fa-check"></i><b>5</b> Orchestration</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="orchestration.html"><a href="orchestration.html#decrement-the-ranks-of-downstream-targets-in-the-priority-queue."><i class="fa fa-check"></i><b>5.1</b> Decrement the ranks of downstream targets in the priority queue.</a></li>
+<li class="chapter" data-level="5.2" data-path="orchestration.html"><a href="orchestration.html#insert-new-targets-dynamically."><i class="fa fa-check"></i><b>5.2</b> Insert new targets dynamically.</a>
+<ul>
+<li class="chapter" data-level="5.2.1" data-path="orchestration.html"><a href="orchestration.html#insert-buds"><i class="fa fa-check"></i><b>5.2.1</b> Insert buds</a></li>
+<li class="chapter" data-level="5.2.2" data-path="orchestration.html"><a href="orchestration.html#insert-branches"><i class="fa fa-check"></i><b>5.2.2</b> Insert branches</a></li>
+</ul></li>
+</ul></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">The targets R Package Developer Documentation</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="classes" class="section level1" number="3">
+<h1><span class="header-section-number">Chapter 3</span> Major internal classes</h1>
+<p><code>targets</code> relies heavily on object-oriented programming, and the following subsections describe the major classes of objects relevant to orchestration and branching. Objects that appear once per workflow are instances of <code>R6</code> classes. To maximize performance, target-specific data structures are lower-tech classes: simple environments with formal constructors, helpers, and validators.</p>
+<div id="algorithm-class" class="section level2" number="3.1">
+<h2><span class="header-section-number">3.1</span> Algorithm class</h2>
+<p>An algorithm in <code>targets</code> is an abstract class that represents how to iterate through the pipeline target by target. Different algorithms describe different kinds of deployment: for example, execution in the main process on the host machine versus parallel execution on a cluster. Every algorithm has a scheduler object and a pipeline object.</p>
+</div>
+<div id="pipeline-class" class="section level2" number="3.2">
+<h2><span class="header-section-number">3.2</span> Pipeline class</h2>
+<p>A pipeline is a wrapper around a collection of targets, and it is responsible for the initial reasoning about the topology of the pipeline before runtime. Pipelines express their reasoning by producing static graphs and scheduler objects early on. In addition, pipelines contain new buds and branches created dynamically during the pipeline.</p>
+</div>
+<div id="scheduler-class" class="section level2" number="3.3">
+<h2><span class="header-section-number">3.3</span> Scheduler class</h2>
+<p>Whereas pipelines are responsible for <em>static</em> topology, schedulers are responsible for <em>dynamic</em> topology. Schedulers know</p>
+<ol style="list-style-type: decimal">
+<li>The upstream and downstream neighbors of each target.</li>
+<li>The progress of each target, e.g. queued, running, or finished.</li>
+<li>How many upstream dependencies need to be checked or built before a target is ready to run.</li>
+</ol>
+<p>To meet these responsibilities, the scheduler is composed of three smaller objects:</p>
+<ol style="list-style-type: decimal">
+<li>A graph object.</li>
+<li>A progress object.</li>
+<li>A priority queue.</li>
+</ol>
+</div>
+<div id="graph-class" class="section level2" number="3.4">
+<h2><span class="header-section-number">3.4</span> Graph class</h2>
+<p>The graph class keeps track of the upstream and downstream neighbors of each target. The scheduler adds edges to the graph when new targets are created dynamically.</p>
+<p>The graph is implemented as two adjacency lists: one for upstream edges and another for downstream edges. For the purposes of powering a pipeline, we find this low-tech structure to be more efficient than <code>igraph</code> in our situation where we repeatedly query the graph and the number of nodes is small. (Transient <code>igraph</code> objects, however, are created for validation and visualization purposes.)</p>
+</div>
+<div id="progress-class" class="section level2" number="3.5">
+<h2><span class="header-section-number">3.5</span> Progress class</h2>
+<p>The progress class keeps track of the state of each target: queued, running, skipped, built, outdated, canceled, or errored. To accomplish this, the progress object maintains a counter object for each category.</p>
+</div>
+<div id="queue-class" class="section level2" number="3.6">
+<h2><span class="header-section-number">3.6</span> Queue class</h2>
+<p>The queue class is a priority queue, essentially a wrapper around a named integer vector of ranks. For <code>targets</code>’ purposes, the rank of a target is the number of unmet dependencies so far, minus a per-target priority value in the interval <code>[0, 1)</code> to control the order in which targets are dequeued. As the pipeline progresses, the queue is checked and modified periodically as dependencies are met. The next target to build is the lowest rank target such that <code>-1L &lt; rank &lt;= 0L</code>. Branches are pushed to the queue when they are dynamically created.</p>
+</div>
+<div id="counter-class" class="section level2" number="3.7">
+<h2><span class="header-section-number">3.7</span> Counter class</h2>
+<p>A counter is an efficient abstraction for keeping track of target membership in a category. A counter stores the number of targets in the category and a hash table with the names of those targets. Counters are used to efficiently keep track of runtime progress (e.g. running, queued, or built) as well membership in the queue.</p>
+</div>
+<div id="target-class" class="section level2" number="3.8">
+<h2><span class="header-section-number">3.8</span> Target class</h2>
+<p>A target is an abstract class for a step of a pipeline. Each target is a composite of intricate sub-classes that keep track of commands, in-memory dependencies, storage, settings, and some aspects of build behavior. As its name implies, the <code>targets</code> package pushes most of its conceptual complexity to the target level in order to decentralize the architecture and make it much easier to reason about the pipeline as a whole.</p>
+<p>There are multiple sub-classes of targets, and the different behaviors of different sub-classes drive the orchestration and branching of targets. The inheritance hierarchy is as follows.</p>
+<ul>
+<li>Target
+<ul>
+<li>Bud</li>
+<li>Builder
+<ul>
+<li>Stem</li>
+<li>Branch</li>
+</ul></li>
+<li>Pattern</li>
+</ul></li>
+</ul>
+</div>
+<div id="stem-class" class="section level2" number="3.9">
+<h2><span class="header-section-number">3.9</span> Stem class</h2>
+<p>A stem is the most basic form of target. It is neither a pattern nor part of a pattern. However, it can dynamically create buds to assist with branching.</p>
+</div>
+<div id="bud-class" class="section level2" number="3.10">
+<h2><span class="header-section-number">3.10</span> Bud class</h2>
+<p>A bud is a target that simply contains part of a stem’s value in memory. The purpose of a bud is to serve as a dependency of a branch when a pattern branches over a stem.</p>
+</div>
+<div id="pattern-class" class="section level2" number="3.11">
+<h2><span class="header-section-number">3.11</span> Pattern class</h2>
+<p>A pattern is an abstract class responsible for creating new branches and dynamically updating the scheduler. Stems and patterns are the only targets the user manually defines in the pipeline.</p>
+</div>
+<div id="branch-class" class="section level2" number="3.12">
+<h2><span class="header-section-number">3.12</span> Branch class</h2>
+<p>A branch is a target that a pattern creates dynamically at runtime.</p>
+</div>
+<div id="builder-class" class="section level2" number="3.13">
+<h2><span class="header-section-number">3.13</span> Builder class</h2>
+<p>Stems and branches have a lot in common: they actually run R commands, and the write the return values to storage. A builder is an abstract class to contain the heavy lifting that stems and branches both do.</p>
+</div>
+<div id="junction-class" class="section level2" number="3.14">
+<h2><span class="header-section-number">3.14</span> Junction class</h2>
+<p>A junction is a manifest of the buds or branches (children) that a stem or pattern dynamically creates, and it depends on the user-specified <code>pattern</code> argument to <code>tar_target()</code>, e.g. <code>tar_target(..., pattern = cross(x, map(y, z)))</code>.</p>
+
+</div>
+</div>
+<div style = "background: #1C356D; color: white; padding: 10px 10px 10px 25px; font-size: 1em; width: 100%;">
+  Copyright Eli Lilly and Company
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="data.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="composition.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": null,
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": null,
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+</body>
+
+</html>

@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 2 Data and metadata management | The targets R Package Developer Documentation</title>
+  <meta name="description" content="In-depth discussion of the major functionality of targets." />
+  <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 2 Data and metadata management | The targets R Package Developer Documentation" />
+  <meta property="og:type" content="book" />
+  <meta property="og:url" content="https://wlandau.github.io/targets-design" />
+  <meta property="og:image" content="https://wlandau.github.io/targets-design/man/figures/logo.png" />
+  <meta property="og:description" content="In-depth discussion of the major functionality of targets." />
+  <meta name="github-repo" content="wlandau/targets-design" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 2 Data and metadata management | The targets R Package Developer Documentation" />
+  
+  <meta name="twitter:description" content="In-depth discussion of the major functionality of targets." />
+  <meta name="twitter:image" content="https://wlandau.github.io/targets-design/man/figures/logo.png" />
+
+<meta name="author" content="Will Landau" />
+<meta name="author" content="Copyright Eli Lilly and Company" />
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  <link rel="apple-touch-icon-precomposed" sizes="120x120" href="man/figures/apple-touch-icon.png" />
+  <link rel="shortcut icon" href="man/figures/favicon.ico" type="image/x-icon" />
+<link rel="prev" href="index.html"/>
+<link rel="next" href="classes.html"/>
+<script src="libs/header-attrs-2.6/header-attrs.js"></script>
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-150843595-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-150843595-1');
+</script>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Introduction</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#design-1"><i class="fa fa-check"></i><b>1.1</b> Design</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="data.html"><a href="data.html"><i class="fa fa-check"></i><b>2</b> Data and metadata management</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="data.html"><a href="data.html#file-system"><i class="fa fa-check"></i><b>2.1</b> File system</a></li>
+<li class="chapter" data-level="2.2" data-path="data.html"><a href="data.html#targets"><i class="fa fa-check"></i><b>2.2</b> Targets</a></li>
+<li class="chapter" data-level="2.3" data-path="data.html"><a href="data.html#progress"><i class="fa fa-check"></i><b>2.3</b> Progress</a></li>
+<li class="chapter" data-level="2.4" data-path="data.html"><a href="data.html#metadata"><i class="fa fa-check"></i><b>2.4</b> Metadata</a></li>
+<li class="chapter" data-level="2.5" data-path="data.html"><a href="data.html#skipping-up-to-date-targets"><i class="fa fa-check"></i><b>2.5</b> Skipping up-to-date targets</a></li>
+<li class="chapter" data-level="2.6" data-path="data.html"><a href="data.html#databases"><i class="fa fa-check"></i><b>2.6</b> Databases</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="classes.html"><a href="classes.html"><i class="fa fa-check"></i><b>3</b> Major internal classes</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="classes.html"><a href="classes.html#algorithm-class"><i class="fa fa-check"></i><b>3.1</b> Algorithm class</a></li>
+<li class="chapter" data-level="3.2" data-path="classes.html"><a href="classes.html#pipeline-class"><i class="fa fa-check"></i><b>3.2</b> Pipeline class</a></li>
+<li class="chapter" data-level="3.3" data-path="classes.html"><a href="classes.html#scheduler-class"><i class="fa fa-check"></i><b>3.3</b> Scheduler class</a></li>
+<li class="chapter" data-level="3.4" data-path="classes.html"><a href="classes.html#graph-class"><i class="fa fa-check"></i><b>3.4</b> Graph class</a></li>
+<li class="chapter" data-level="3.5" data-path="classes.html"><a href="classes.html#progress-class"><i class="fa fa-check"></i><b>3.5</b> Progress class</a></li>
+<li class="chapter" data-level="3.6" data-path="classes.html"><a href="classes.html#queue-class"><i class="fa fa-check"></i><b>3.6</b> Queue class</a></li>
+<li class="chapter" data-level="3.7" data-path="classes.html"><a href="classes.html#counter-class"><i class="fa fa-check"></i><b>3.7</b> Counter class</a></li>
+<li class="chapter" data-level="3.8" data-path="classes.html"><a href="classes.html#target-class"><i class="fa fa-check"></i><b>3.8</b> Target class</a></li>
+<li class="chapter" data-level="3.9" data-path="classes.html"><a href="classes.html#stem-class"><i class="fa fa-check"></i><b>3.9</b> Stem class</a></li>
+<li class="chapter" data-level="3.10" data-path="classes.html"><a href="classes.html#bud-class"><i class="fa fa-check"></i><b>3.10</b> Bud class</a></li>
+<li class="chapter" data-level="3.11" data-path="classes.html"><a href="classes.html#pattern-class"><i class="fa fa-check"></i><b>3.11</b> Pattern class</a></li>
+<li class="chapter" data-level="3.12" data-path="classes.html"><a href="classes.html#branch-class"><i class="fa fa-check"></i><b>3.12</b> Branch class</a></li>
+<li class="chapter" data-level="3.13" data-path="classes.html"><a href="classes.html#builder-class"><i class="fa fa-check"></i><b>3.13</b> Builder class</a></li>
+<li class="chapter" data-level="3.14" data-path="classes.html"><a href="classes.html#junction-class"><i class="fa fa-check"></i><b>3.14</b> Junction class</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="composition.html"><a href="composition.html"><i class="fa fa-check"></i><b>4</b> The composition of target objects</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="composition.html"><a href="composition.html#overall-structure"><i class="fa fa-check"></i><b>4.1</b> Overall structure</a></li>
+<li class="chapter" data-level="4.2" data-path="composition.html"><a href="composition.html#classes-1"><i class="fa fa-check"></i><b>4.2</b> Classes</a>
+<ul>
+<li class="chapter" data-level="4.2.1" data-path="composition.html"><a href="composition.html#command-class"><i class="fa fa-check"></i><b>4.2.1</b> Command class</a></li>
+<li class="chapter" data-level="4.2.2" data-path="composition.html"><a href="composition.html#settings-class"><i class="fa fa-check"></i><b>4.2.2</b> Settings class</a></li>
+<li class="chapter" data-level="4.2.3" data-path="composition.html"><a href="composition.html#cache-class"><i class="fa fa-check"></i><b>4.2.3</b> Cache class</a></li>
+<li class="chapter" data-level="4.2.4" data-path="composition.html"><a href="composition.html#memory-class"><i class="fa fa-check"></i><b>4.2.4</b> Memory class</a></li>
+<li class="chapter" data-level="4.2.5" data-path="composition.html"><a href="composition.html#value-class"><i class="fa fa-check"></i><b>4.2.5</b> Value class</a></li>
+</ul></li>
+<li class="chapter" data-level="4.3" data-path="composition.html"><a href="composition.html#metrics-class"><i class="fa fa-check"></i><b>4.3</b> Metrics class</a>
+<ul>
+<li class="chapter" data-level="4.3.1" data-path="composition.html"><a href="composition.html#store-class"><i class="fa fa-check"></i><b>4.3.1</b> Store class</a></li>
+<li class="chapter" data-level="4.3.2" data-path="composition.html"><a href="composition.html#file-class"><i class="fa fa-check"></i><b>4.3.2</b> File class</a></li>
+<li class="chapter" data-level="4.3.3" data-path="composition.html"><a href="composition.html#subpipeline"><i class="fa fa-check"></i><b>4.3.3</b> Subpipeline</a></li>
+<li class="chapter" data-level="4.3.4" data-path="composition.html"><a href="composition.html#junction-class-1"><i class="fa fa-check"></i><b>4.3.4</b> Junction class</a></li>
+<li class="chapter" data-level="4.3.5" data-path="composition.html"><a href="composition.html#pedigree-class"><i class="fa fa-check"></i><b>4.3.5</b> Pedigree class</a></li>
+<li class="chapter" data-level="4.3.6" data-path="composition.html"><a href="composition.html#cue-class"><i class="fa fa-check"></i><b>4.3.6</b> Cue class</a></li>
+<li class="chapter" data-level="4.3.7" data-path="composition.html"><a href="composition.html#patternview-class"><i class="fa fa-check"></i><b>4.3.7</b> Patternview class</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="orchestration.html"><a href="orchestration.html"><i class="fa fa-check"></i><b>5</b> Orchestration</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="orchestration.html"><a href="orchestration.html#decrement-the-ranks-of-downstream-targets-in-the-priority-queue."><i class="fa fa-check"></i><b>5.1</b> Decrement the ranks of downstream targets in the priority queue.</a></li>
+<li class="chapter" data-level="5.2" data-path="orchestration.html"><a href="orchestration.html#insert-new-targets-dynamically."><i class="fa fa-check"></i><b>5.2</b> Insert new targets dynamically.</a>
+<ul>
+<li class="chapter" data-level="5.2.1" data-path="orchestration.html"><a href="orchestration.html#insert-buds"><i class="fa fa-check"></i><b>5.2.1</b> Insert buds</a></li>
+<li class="chapter" data-level="5.2.2" data-path="orchestration.html"><a href="orchestration.html#insert-branches"><i class="fa fa-check"></i><b>5.2.2</b> Insert branches</a></li>
+</ul></li>
+</ul></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">The targets R Package Developer Documentation</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="data" class="section level1" number="2">
+<h1><span class="header-section-number">Chapter 2</span> Data and metadata management</h1>
+<p>Like its predecessor, <code>drake</code>, the <code>targets</code> package</p>
+<ol style="list-style-type: decimal">
+<li>Abstracts files as R objects.</li>
+<li>Records the real-time progress of targets as they are running.</li>
+<li>Records special metadata in order to skip targets that are already up to date.</li>
+</ol>
+<p>Unlike <code>drake</code>, which outsources data and metadata management to an external package, <code>targets</code> has an entirely custom internal data system. <code>targets</code> goes out of its way to reduce the number of files in storage, centralize the progress data and metadata, assign informative file names, and expose the file system to the user. This approach increases efficiency and portability, and it helps users understand and take control of their data.</p>
+<div id="file-system" class="section level2" number="2.1">
+<h2><span class="header-section-number">2.1</span> File system</h2>
+<p>When a <code>targets</code> pipeline runs, it creates a folder called <code>_targets</code> to store all the files it needs.</p>
+<pre><code>_targets/
+├── meta/
+├────── progress
+├────── meta
+├── objects/
+├────── target1 
+├────── target2
+├────── branching_target_c7bcb4bd
+├────── branching_target_285fb6a9
+├────── branching_target_874ca381
+└── scratch/ # Temporary files deleted at the end of tar_make().</code></pre>
+<p>The number of files equals the number of targets plus two, which makes projects easier to upload and share among collaborators than <code>drake</code>’s <code>.drake/</code> cache. (Files in <code>_targets/scratch/</code> do not count because they can all be safely deleted after <code>tar_make()</code>.) However, these files may still be too large and too numerous for code-specific version control systems like Git. For such projects, it may be more appropriate to share caches through external version-aware platforms such as Dropbox, Microsoft OneDrive, and Google Docs.</p>
+</div>
+<div id="targets" class="section level2" number="2.2">
+<h2><span class="header-section-number">2.2</span> Targets</h2>
+<p>With the exception of dynamic files, the return value of each target lives in its own file inside <code>_targets/objects/</code>. The file name is the name of the target, and there is no file extension. The metadata keeps track of the storage format that governs how to read and write the target’s data. The default format is RDS, so if target <code>x</code> has no explicit format, then <code>readRDS("_targets/objects/x")</code> will read the data. (However, we state this just for the sake of understanding. The recommended way to read data is <code>tar_read()</code>, which takes the storage format into account.)</p>
+</div>
+<div id="progress" class="section level2" number="2.3">
+<h2><span class="header-section-number">2.3</span> Progress</h2>
+<p>The file <code>_targets/meta/progress</code> is a pipe-separated flat file with the name of each target and it’s current runtime progress (running, built, cancelled, or errored). The information in this file helps users keep track of what the pipeline is doing at a given moment. <code>targets</code> periodically appends rows to <code>_targets/meta/progress</code> as the pipeline progresses, so duplicated names usually appear. For any target with duplicated rows in <code>_targets/meta/progress</code>, only the lowest row is valid.</p>
+<p>In most situations, the progress file can be safely excluded from version control. Functions like <code>tar_graph()</code> use progress information, but it is not essential to the reproducible end product.</p>
+</div>
+<div id="metadata" class="section level2" number="2.4">
+<h2><span class="header-section-number">2.4</span> Metadata</h2>
+<p><code>targets</code> uses special metadata to decide which targets are up to date and which need to run. The metadata file <code>_targets/meta/meta</code> is a flat file with one row for every target and every global object relevant to the pipeline. <code>targets</code> appends new rows to this file as the pipeline progresses. Unlike <code>drake</code>, the metadata is centralized and compatible with <code>data.table</code>, which makes it far faster to check which targets are up to date. In addition, the metadata system allows <code>targets</code> to check not only for up-to-date targets, but also up-to-date global objects, which makes it easier for the user to understand <em>why</em> a target is outdated.</p>
+<p><code>_targets/meta/meta</code> has the following columns. Global objects use only the <code>name</code>, <code>type</code>, and <code>data</code> fields.</p>
+<ul>
+<li><code>name</code>: Name of the object or target.</li>
+<li><code>type</code>: Class name of the object or target.</li>
+<li><code>data</code>: Hash of the global object or the file containing the target’s return value.</li>
+<li><code>command</code>: Hash of the R command to run the target.</li>
+<li><code>depend</code>: Composite hash of all the target’s immediate upstream dependencies.</li>
+<li><code>seed</code>: Random number generator seed of the target. A target seed is unique and deterministically generated from its name.</li>
+<li><code>path</code>: The file path where the return value is stored. For dynamic files, this field could include multiple character strings.</li>
+<li><code>time</code>: Character, hash of the maximum of all the time stamps of the files in <code>path</code>.</li>
+<li><code>size</code>: Character, hash of the total file size of all the target’s files in <code>path</code>.</li>
+<li><code>bytes</code>: Numeric, total file size in bytes of all the target’s files in <code>path</code>.</li>
+<li><code>format</code>: Name of the storage format of the target. User-specified with <code>tar_target()</code> or <code>tar_option_set()</code>.</li>
+<li><code>iteration</code>: Iteration mode of the target’s value, either <code>"vector"</code> or <code>"list"</code>. User-specified with <code>tar_target()</code> or <code>tar_option_set()</code>.</li>
+<li><code>parent</code>: Name of the parent pattern of the target if the target is a branch.</li>
+<li><code>children</code>: For patterns and branching stems, this field has the names of all the branches and buds. Can contain multiple character strings. Empty for branches and non-branching stems.</li>
+<li><code>seconds</code>: Runtime of the target in seconds.</li>
+<li><code>warnings</code>: Warning messages thrown when the target ran.</li>
+<li><code>error</code>: Error message thrown when the target ran.</li>
+</ul>
+<p>These fields are pipe-separated in the flat file. Fields <code>path</code> and <code>children</code> can have multiple character strings, and these character strings are separated by asterisks in storage. (In memory, <code>path</code> and <code>children</code> are list columns.)</p>
+</div>
+<div id="skipping-up-to-date-targets" class="section level2" number="2.5">
+<h2><span class="header-section-number">2.5</span> Skipping up-to-date targets</h2>
+<p><code>targets</code> uses the metadata to decide if a target is up to date. The <code>should_run()</code> method of the <code>builder</code> class manages this. A target is outdated if one of the following conditions is met. <code>targets</code> checks these rules in the order given above. There is a special <code>cue</code> class to allow the user to customize / suppress most of these rules.</p>
+<ol style="list-style-type: decimal">
+<li>There is no metadata record of the target.</li>
+<li>The target errored last run.</li>
+<li>The target has a different class than it did before.</li>
+<li>The cue mode equals <code>"always"</code>.</li>
+<li>The cue mode does not equal <code>"never"</code>.</li>
+<li>The <code>command</code> metadata field (the hash of the R command) is different from last time.</li>
+<li>The <code>depend</code> metadata field (the hash of the immediate upstream dependency targets and global objects) is different from last time.</li>
+<li>The storage <code>format</code> (user-specified with <code>tar_target()</code> or <code>tar_option_set()</code>) is different from last time.</li>
+<li>The <code>iteration</code> method (user-specified with <code>tar_target()</code> or <code>tar_option_set()</code>) is different from last time.</li>
+<li>A target’s file (either the one in <code>_targets/objects/</code> or a dynamic file) does not exist or changed since last time.</li>
+</ol>
+<p>A target’s dependencies can include functions, and these functions are tracked for changes using a custom hashing procedure. When a function’s hash changes, the function is considered invalidated, and so are any downstream targets with the <code>depend</code> cue turned on. The <code>targets</code> package computes the hash of a function in the following way.
+1. Deparse the function with <code>targets:::safe_deparse()</code>. This function computes a string representation of the function that removes comments and standardizes whitespace so that trivial changes to formatting do not cue targets to rerun.
+1. Manually remove any literal pointers from the function string using <code>targets:::mask_pointers()</code>. Such pointers arise from inline compiled C/C++ functions.
+1. Compute a hash on the preprocessed string above using <code>targets:::digest_chr64()</code>.</p>
+<p>Those functions themselves have dependencies, and those dependencies are detected with <code>codetools::findGlobals()</code>. Dependencies of functions may include other global functions or global objects. If a dependency of a function is invalidated, the function itself is invalidated, and so are any dependent targets with the <code>depend</code> cue turned on.</p>
+</div>
+<div id="databases" class="section level2" number="2.6">
+<h2><span class="header-section-number">2.6</span> Databases</h2>
+<p><code>targets</code> manages <code>_targets/meta/progress</code> and <code>_targets/meta/meta</code> with an internal <code>database</code> class, which has methods to read, write, and deduplicate entire datasets as well as row-append records for individual targets. To maximize performance, <code>targets</code> uses <code>fread()</code> and <code>fwrite()</code> from <code>data.table</code> when working with entire databases and <code>base::write()</code> to append individual rows. The <code>database</code> class also supports and internal in-memory cache in order to avoid costly interactions with storage.</p>
+<p>Internal classes <code>progress</code> and <code>meta</code> each have a <code>database</code> object and methods specific to the use case. And for additional safety, the <code>record</code> class encapsulates and validates individual rows of metadata.</p>
+
+</div>
+</div>
+<div style = "background: #1C356D; color: white; padding: 10px 10px 10px 25px; font-size: 1em; width: 100%;">
+  Copyright Eli Lilly and Company
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="index.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="classes.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": null,
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": null,
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+</body>
+
+</html>
