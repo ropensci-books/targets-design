@@ -277,7 +277,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <div id="skipping-up-to-date-targets" class="section level2" number="2.5">
 <h2><span class="header-section-number">2.5</span> Skipping up-to-date targets</h2>
-<p><code>targets</code> uses the metadata to decide if a target is up to date. The <code>should_run()</code> method of the <code>builder</code> class manages this. A target is outdated if one of the following conditions is met. <code>targets</code> checks these rules in the order given above. There is a special <code>cue</code> class to allow the user to customize / suppress most of these rules.</p>
+<p><code>targets</code> uses the metadata to decide if a target is up to date. The <code>should_run()</code> method of the <code>builder</code> class manages this. A target is outdated if one of the following conditions is met. <code>targets</code> checks these rules in the order given below. There is a special <code>cue</code> class to allow the user to customize / suppress most of these rules.</p>
 <ol style="list-style-type: decimal">
 <li>There is no metadata record of the target.</li>
 <li>The target errored last run.</li>
