@@ -1,5 +1,5 @@
 ---
-title: "The targets R Package Developer Documentation"
+title: "The targets R Package Design Documents"
 author:
 - "Will Landau"
 - "Copyright Eli Lilly and Company"
