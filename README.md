@@ -7,3 +7,7 @@
 [![publish](https://github.com/ropensci/targets-design/workflows/publish/badge.svg)](https://github.com/ropensci/targets-design/actions?query=workflow%3Apublish)
 
 This repository contains the design documents of the [`targets`](https://github.com/ropensci/targets) R package. These specifications describe the internal architecture, the data storage model, and the orchestration and branching model. The goal is to help developers contribute to core elements of the package. The rendered output lives at <https://books.ropensci.org/targets-design>.
+
+## Code of conduct
+
+Please note that this package is released with a [Contributor Code of Conduct](https://ropensci.org/code-of-conduct/).
