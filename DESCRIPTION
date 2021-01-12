@@ -4,12 +4,12 @@ Description: This repository contains the design documents of the 'targets' R pa
   These specifications describe the internal architecture, the data storage model,
   and the orchestration and branching model. The goal is to help developers contribute
   to core elements of the package. The rendered output lives at
-  <https://ropensci.github.io/targets-design>.
+  <https://books.ropensci.org/targets-design>.
 Version: 0.0.0.9000
 License: MIT + file LICENSE
-URL: https://ropensci.github.io/targets-design,
-  https://github.com/ropensci/targets-design
-BugReports: https://github.com/ropensci/targets-design/issues
+URL: https://books.ropensci.org/targets-design,
+  https://github.com/ropensci-books/targets-design
+BugReports: https://github.com/ropensci-books/targets-design/issues
 Authors@R: c(
   person(
     given = c("William", "Michael"),

@@ -12,9 +12,9 @@ output:
     includes:
       in_header: [google_analytics.html]
       after_body: footer.html
-url: "https://ropensci.github.io/targets-design"
+url: "https://books.ropensci.org/targets-design"
 description: "In-depth discussion of the major functionality of targets."
-github-repo: "ropensci/targets-design"
+github-repo: "ropensci-books/targets-design"
 cover-image: /man/figures/logo.png
 apple-touch-icon: "man/figures/apple-touch-icon.png"
 apple-touch-icon-size: 120
