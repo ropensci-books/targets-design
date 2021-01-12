@@ -12,9 +12,9 @@ output:
     includes:
       in_header: [google_analytics.html]
       after_body: footer.html
-url: "https://wlandau.github.io/targets-design"
+url: "https://ropensci.github.io/targets-design"
 description: "In-depth discussion of the major functionality of targets."
-github-repo: "wlandau/targets-design"
+github-repo: "ropensci/targets-design"
 cover-image: /man/figures/logo.png
 apple-touch-icon: "man/figures/apple-touch-icon.png"
 apple-touch-icon-size: 120
@@ -29,8 +29,8 @@ knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
 
 # Introduction {#design}
 
-The [`targets`](https://github.com/wlandau/targets) package is a [Make](https://www.gnu.org/software/make/)-like pipeline toolkit for Statistics and data science in R. With [`targets`](https://github.com/wlandau/targets), you can maintain a reproducible workflow without repeating yourself. [`targets`](https://github.com/wlandau/targets) learns how your pipeline fits together, skips costly runtime for tasks that are already up to date, runs only the necessary computation, supports implicit parallel computing, abstracts files as R objects, and shows tangible evidence that the results match the underlying code and data.
+The [`targets`](https://github.com/ropensci/targets) package is a [Make](https://www.gnu.org/software/make/)-like pipeline toolkit for Statistics and data science in R. With [`targets`](https://github.com/ropensci/targets), you can maintain a reproducible workflow without repeating yourself. [`targets`](https://github.com/ropensci/targets) learns how your pipeline fits together, skips costly runtime for tasks that are already up to date, runs only the necessary computation, supports implicit parallel computing, abstracts files as R objects, and shows tangible evidence that the results match the underlying code and data.
 
 ## Design
 
-[`targets`](https://github.com/wlandau/targets) has an elaborate structure to support its advanced features while ensuring decent performance. This `bookdown` site is a collection of design documents to explain this architecture, including the data storage model, object oriented design, and orchestration and branching model. 
+[`targets`](https://github.com/ropensci/targets) has an elaborate structure to support its advanced features while ensuring decent performance. This `bookdown` site is a collection of design documents to explain this architecture, including the data storage model, object oriented design, and orchestration and branching model. 

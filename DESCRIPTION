@@ -4,12 +4,12 @@ Description: This repository contains the design documents of the 'targets' R pa
   These specifications describe the internal architecture, the data storage model,
   and the orchestration and branching model. The goal is to help developers contribute
   to core elements of the package. The rendered output lives at
-  <https://wlandau.github.io/targets-design>.
+  <https://ropensci.github.io/targets-design>.
 Version: 0.0.0.9000
 License: MIT + file LICENSE
-URL: https://wlandau.github.io/targets-design,
-  https://github.com/wlandau/targets-design
-BugReports: https://github.com/wlandau/targets-design/issues
+URL: https://ropensci.github.io/targets-design,
+  https://github.com/ropensci/targets-design
+BugReports: https://github.com/ropensci/targets-design/issues
 Authors@R: c(
   person(
     given = c("William", "Michael"),
@@ -33,8 +33,8 @@ Suggests:
   rmarkdown (>= 2.4),
   testthat (>= 2.3.2)
 Remotes:
-  wlandau/tarchetypes,
-  wlandau/targets
+  ropensci/tarchetypes,
+  ropensci/targets
 Encoding: UTF-8
 Language: en-US
 Roxygen: list(markdown = TRUE)

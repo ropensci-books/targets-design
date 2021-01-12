@@ -1,5 +1,5 @@
 book_filename: "targets-design"
-repo: "https://wlandau.github.io/targets-design"
+repo: "https://ropensci.github.io/targets-design"
 language:
   ui:
     chapter_name: "Chapter "
