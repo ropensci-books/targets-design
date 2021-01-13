@@ -5,7 +5,7 @@ Description: This repository contains the design documents of the 'targets' R pa
   and the orchestration and branching model. The goal is to help developers contribute
   to core elements of the package. The rendered output lives at
   <https://wlandau.github.io/targets-design>.
-Version: 0.0.0.9000
+Version: 0.0.1
 License: MIT + file LICENSE
 URL: https://wlandau.github.io/targets-design,
   https://github.com/wlandau/targets-design
