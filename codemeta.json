@@ -1,14 +1,17 @@
 {
-  "@context": ["https://doi.org/10.5063/schema/codemeta-2.0", "http://schema.org"],
+  "@context": [
+    "https://doi.org/10.5063/schema/codemeta-2.0",
+    "http://schema.org"
+  ],
   "@type": "SoftwareSourceCode",
   "identifier": "targets.design",
-  "description": "This repository contains the design documents of the 'targets' R package.\n  These specifications describe the internal architecture, the data storage model,\n  and the orchestration and branching model. The goal is to help developers contribute\n  to core elements of the package. The rendered output lives at\n  <https://books.ropensci.org/targets-design>.",
+  "description": "This repository contains the design documents of the 'targets' R package.\n  These specifications describe the internal architecture, the data storage model,\n  and the orchestration and branching model. The goal is to help developers contribute\n  to core elements of the package. Developers are encouraged to to read\n  the rendered output at <https://books.ropensci.org/targets-design>.",
   "name": "targets.design: Targets R Package Design Documents",
   "codeRepository": "https://github.com/ropensci-books/targets-design",
   "relatedLink": "https://books.ropensci.org/targets-design",
   "issueTracker": "https://github.com/ropensci-books/targets-design/issues",
   "license": "https://spdx.org/licenses/MIT",
-  "version": "0.0.0.9000",
+  "version": "0.0.1",
   "programmingLanguage": {
     "@type": "ComputerLanguage",
     "name": "R",
@@ -106,23 +109,25 @@
       "@type": "SoftwareApplication",
       "identifier": "tarchetypes",
       "name": "tarchetypes",
-      "version": ">= 0.0.0.9001",
+      "version": ">= 0.0.1",
       "sameAs": "https://github.com/ropensci/tarchetypes"
     },
     {
       "@type": "SoftwareApplication",
       "identifier": "targets",
       "name": "targets",
-      "version": ">= 0.0.0.9003",
+      "version": ">= 0.0.1",
       "sameAs": "https://github.com/ropensci/targets"
     }
   ],
   "releaseNotes": "https://github.com/ropensci-books/targets-design/blob/master/NEWS.md",
-  "fileSize": "1150.225KB",
+  "fileSize": "1120.876KB",
   "developmentStatus": "https://www.repostatus.org/#active",
   "review": {
     "@type": "Review",
     "url": "https://github.com/ropensci/software-review/issues/401",
     "provider": "https://ropensci.org"
-  }
+  },
+  "readme": "https://github.com/ropensci-books/targets-design/blob/main/README.md",
+  "keywords": ["targets", "r", "rstats", "workflow", "reproducibility", "high-performance-computing", "pipeline", "make"]
 }
