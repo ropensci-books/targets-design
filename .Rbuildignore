@@ -1,10 +1,10 @@
+^\.github$
+^.*\.html$
+^.*\.Rmd$
 ^.*\.Rproj$
 ^\.Rproj\.user$
+^.*\.yml$
+^CONTRIBUTING\.md$
+^LICENSE\.md$
 ^codemeta\.json$
-^\.github$
-^.*\.Rmd$
-^.*\.md$
-^footer\.html$
-^google_analytics\.html$
-^.*\.yml
 ^.*\.code-workspace$
