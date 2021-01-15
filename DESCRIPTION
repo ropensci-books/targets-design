@@ -1,6 +1,6 @@
 Package: targets.design
-Title: Targets R Package Design Documents
-Description: This repository contains the design documents of the 'targets' R package.
+Title: Targets R Package Design Specification
+Description: This repository contains the design specification of the 'targets' R package.
   These specifications describe the internal architecture, the data storage model,
   and the orchestration and branching model. The goal is to help developers contribute
   to core elements of the package. Developers are encouraged to to read

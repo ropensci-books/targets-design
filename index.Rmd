@@ -1,5 +1,5 @@
 ---
-title: "The targets R Package Design Documents"
+title: "The targets R Package Design Specification"
 author:
 - "Will Landau"
 - "Copyright Eli Lilly and Company"
@@ -13,7 +13,6 @@ output:
       in_header: [google_analytics.html]
       after_body: footer.html
 url: "https://books.ropensci.org/targets-design"
-description: "In-depth discussion of the major functionality of targets."
 github-repo: "ropensci-books/targets-design"
 cover-image: /man/figures/logo.png
 apple-touch-icon: "man/figures/apple-touch-icon.png"
@@ -33,4 +32,4 @@ The [`targets`](https://github.com/ropensci/targets) package is a [Make](https:/
 
 ## Design
 
-[`targets`](https://github.com/ropensci/targets) has an elaborate structure to support its advanced features while ensuring decent performance. This `bookdown` site is a collection of design documents to explain this architecture, including the data storage model, object oriented design, and orchestration and branching model. 
+[`targets`](https://github.com/ropensci/targets) has an elaborate structure to support its advanced features while ensuring decent performance. This `bookdown` site is a design specification to explain the major aspects of the internal architecture, including the data storage model, object oriented design, and orchestration and branching model. 
