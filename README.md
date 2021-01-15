@@ -1,7 +1,8 @@
 # targets R package design specification
 
 [![ropensci](https://badges.ropensci.org/401_status.svg)](https://github.com/ropensci/software-review/issues/401)
-[![JOSS](https://joss.theoj.org/papers/10.21105/joss.02959/status.svg)](https://doi.org/10.21105/joss.02959) 
+[![joss](https://joss.theoj.org/papers/10.21105/joss.02959/status.svg)](https://doi.org/10.21105/joss.02959)
+[![zenodo](https://zenodo.org/badge/327033759.svg)](https://zenodo.org/badge/latestdoi/327033759)
 [![status](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
 [![check](https://github.com/ropensci/targets-design/workflows/check/badge.svg)](https://github.com/ropensci/targets-design/actions?query=workflow%3Acheck)
 [![publish](https://github.com/ropensci/targets-design/workflows/publish/badge.svg)](https://github.com/ropensci/targets-design/actions?query=workflow%3Apublish)
