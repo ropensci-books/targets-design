@@ -4,22 +4,22 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>The targets R Package Design Documents</title>
-  <meta name="description" content="In-depth discussion of the major functionality of targets." />
+  <title>The targets R Package Design Specification</title>
+  <meta name="description" content="The targets R Package Design Specification" />
   <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="The targets R Package Design Documents" />
+  <meta property="og:title" content="The targets R Package Design Specification" />
   <meta property="og:type" content="book" />
-  <meta property="og:url" content="https://wlandau.github.io/targets-design" />
-  <meta property="og:image" content="https://wlandau.github.io/targets-design/man/figures/logo.png" />
-  <meta property="og:description" content="In-depth discussion of the major functionality of targets." />
-  <meta name="github-repo" content="wlandau/targets-design" />
+  <meta property="og:url" content="https://books.ropensci.org/targets-design" />
+  <meta property="og:image" content="https://books.ropensci.org/targets-design/man/figures/logo.png" />
+  
+  <meta name="github-repo" content="ropensci-books/targets-design" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="The targets R Package Design Documents" />
+  <meta name="twitter:title" content="The targets R Package Design Specification" />
   
-  <meta name="twitter:description" content="In-depth discussion of the major functionality of targets." />
-  <meta name="twitter:image" content="https://wlandau.github.io/targets-design/man/figures/logo.png" />
+  
+  <meta name="twitter:image" content="https://books.ropensci.org/targets-design/man/figures/logo.png" />
 
 <meta name="author" content="Will Landau" />
 <meta name="author" content="Copyright Eli Lilly and Company" />
@@ -66,6 +66,7 @@
 pre > code.sourceCode { white-space: pre; position: relative; }
 pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
 pre.sourceCode { margin: 0; }
 @media screen {
@@ -214,7 +215,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       <div class="body-inner">
         <div class="book-header" role="navigation">
           <h1>
-            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">The targets R Package Design Documents</a>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">The targets R Package Design Specification</a>
           </h1>
         </div>
 
@@ -223,16 +224,16 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
             <section class="normal" id="section-">
 <div id="header">
-<h1 class="title">The targets R Package Design Documents</h1>
+<h1 class="title">The targets R Package Design Specification</h1>
 <p class="author"><em>Will Landau</em></p>
 <p class="author"><em>Copyright Eli Lilly and Company</em></p>
 </div>
 <div id="design" class="section level1" number="1">
 <h1><span class="header-section-number">Chapter 1</span> Introduction</h1>
-<p>The <a href="https://github.com/wlandau/targets"><code>targets</code></a> package is a <a href="https://www.gnu.org/software/make/">Make</a>-like pipeline toolkit for Statistics and data science in R. With <a href="https://github.com/wlandau/targets"><code>targets</code></a>, you can maintain a reproducible workflow without repeating yourself. <a href="https://github.com/wlandau/targets"><code>targets</code></a> learns how your pipeline fits together, skips costly runtime for tasks that are already up to date, runs only the necessary computation, supports implicit parallel computing, abstracts files as R objects, and shows tangible evidence that the results match the underlying code and data.</p>
+<p>The <a href="https://github.com/ropensci/targets"><code>targets</code></a> package is a <a href="https://www.gnu.org/software/make/">Make</a>-like pipeline toolkit for Statistics and data science in R. With <a href="https://github.com/ropensci/targets"><code>targets</code></a>, you can maintain a reproducible workflow without repeating yourself. <a href="https://github.com/ropensci/targets"><code>targets</code></a> learns how your pipeline fits together, skips costly runtime for tasks that are already up to date, runs only the necessary computation, supports implicit parallel computing, abstracts files as R objects, and shows tangible evidence that the results match the underlying code and data.</p>
 <div id="design-1" class="section level2" number="1.1">
 <h2><span class="header-section-number">1.1</span> Design</h2>
-<p><a href="https://github.com/wlandau/targets"><code>targets</code></a> has an elaborate structure to support its advanced features while ensuring decent performance. This <code>bookdown</code> site is a collection of design documents to explain this architecture, including the data storage model, object oriented design, and orchestration and branching model.</p>
+<p><a href="https://github.com/ropensci/targets"><code>targets</code></a> has an elaborate structure to support its advanced features while ensuring decent performance. This <code>bookdown</code> site is a design specification to explain the major aspects of the internal architecture, including the data storage model, object oriented design, and orchestration and branching model.</p>
 
 </div>
 </div>
@@ -267,11 +268,11 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/wlandau/targets-design/edit/main/index.Rmd",
+"link": "https://github.com/ropensci/targets-design/edit/main/index.Rmd",
 "text": "Edit this chapter"
 },
 "history": {
-"link": "https://github.com/wlandau/targets-design/commits/main/index.Rmd",
+"link": "https://github.com/ropensci/targets-design/commits/main/index.Rmd",
 "text": "Chapter edit history"
 },
 "view": {
