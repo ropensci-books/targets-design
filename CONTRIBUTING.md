@@ -6,10 +6,14 @@ Development is a community effort, and we welcome participation.
 
 By participating in this project, you agree to abide by the [code of conduct](https://github.com/ropensci-books/targets-design/blob/main/CODE_OF_CONDUCT.md).
 
+## Discussions
+
+At <https://github.com/ropensci-books/targets-design/discussions>, you can post general questions, brainstorm ideas, and ask for help.
+
 ## Issues
 
-Anyone can submit an issue to <https://github.com/ropensci-books/targets-design/issues> or comment on an existing thread. Please reach out if you see potential ways to improve the project.
-    
+<https://github.com/ropensci-books/targets-design/issues> is for bug reports, performance issues, maintenance tasks, and feature requests.
+
 ## Development
 
 External code contributions are extremely helpful in the right circumstances. Here are the recommended steps.
