@@ -2,7 +2,7 @@ lank_issues_enabled: true
 contact_links:
   - name: General
     url: https://github.com/ropensci-books/targets-design/discussions/categories/general
-    about: Chat about the architecture of targets.
+    about: Chat about the architecture or design specification of targets.
   - name: Help
     url: https://github.com/ropensci-books/targets-design/discussions/categories/help
     about: Ask questions and get help.
