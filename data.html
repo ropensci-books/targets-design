@@ -150,10 +150,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <ul>
 <li class="chapter" data-level="2.1" data-path="data.html"><a href="data.html#file-system"><i class="fa fa-check"></i><b>2.1</b> File system</a></li>
 <li class="chapter" data-level="2.2" data-path="data.html"><a href="data.html#targets"><i class="fa fa-check"></i><b>2.2</b> Targets</a></li>
-<li class="chapter" data-level="2.3" data-path="data.html"><a href="data.html#progress"><i class="fa fa-check"></i><b>2.3</b> Progress</a></li>
-<li class="chapter" data-level="2.4" data-path="data.html"><a href="data.html#metadata"><i class="fa fa-check"></i><b>2.4</b> Metadata</a></li>
-<li class="chapter" data-level="2.5" data-path="data.html"><a href="data.html#skipping-up-to-date-targets"><i class="fa fa-check"></i><b>2.5</b> Skipping up-to-date targets</a></li>
-<li class="chapter" data-level="2.6" data-path="data.html"><a href="data.html#databases"><i class="fa fa-check"></i><b>2.6</b> Databases</a></li>
+<li class="chapter" data-level="2.3" data-path="data.html"><a href="data.html#process"><i class="fa fa-check"></i><b>2.3</b> Process</a></li>
+<li class="chapter" data-level="2.4" data-path="data.html"><a href="data.html#progress"><i class="fa fa-check"></i><b>2.4</b> Progress</a></li>
+<li class="chapter" data-level="2.5" data-path="data.html"><a href="data.html#metadata"><i class="fa fa-check"></i><b>2.5</b> Metadata</a></li>
+<li class="chapter" data-level="2.6" data-path="data.html"><a href="data.html#skipping-up-to-date-targets"><i class="fa fa-check"></i><b>2.6</b> Skipping up-to-date targets</a></li>
+<li class="chapter" data-level="2.7" data-path="data.html"><a href="data.html#databases"><i class="fa fa-check"></i><b>2.7</b> Databases</a></li>
 </ul></li>
 <li class="chapter" data-level="3" data-path="classes.html"><a href="classes.html"><i class="fa fa-check"></i><b>3</b> Major internal classes</a>
 <ul>
@@ -237,8 +238,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>When a <code>targets</code> pipeline runs, it creates a folder called <code>_targets</code> to store all the files it needs.</p>
 <pre><code>_targets/
 ├── meta/
-├────── progress
 ├────── meta
+├────── process
+├────── progress
 ├── objects/
 ├────── target1 
 ├────── target2
@@ -252,13 +254,17 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h2><span class="header-section-number">2.2</span> Targets</h2>
 <p>With the exception of dynamic files, the return value of each target lives in its own file inside <code>_targets/objects/</code>. The file name is the name of the target, and there is no file extension. The metadata keeps track of the storage format that governs how to read and write the target’s data. The default format is RDS, so if target <code>x</code> has no explicit format, then <code>readRDS("_targets/objects/x")</code> will read the data. (However, we state this just for the sake of understanding. The recommended way to read data is <code>tar_read()</code>, which takes the storage format into account.)</p>
 </div>
-<div id="progress" class="section level2" number="2.3">
-<h2><span class="header-section-number">2.3</span> Progress</h2>
-<p>The file <code>_targets/meta/progress</code> is a pipe-separated flat file with the name of each target and it’s current runtime progress (running, built, cancelled, or errored). The information in this file helps users keep track of what the pipeline is doing at a given moment. <code>targets</code> periodically appends rows to <code>_targets/meta/progress</code> as the pipeline progresses, so duplicated names usually appear. For any target with duplicated rows in <code>_targets/meta/progress</code>, only the lowest row is valid.</p>
+<div id="process" class="section level2" number="2.3">
+<h2><span class="header-section-number">2.3</span> Process</h2>
+<p>The file <code>_targets/meta/process</code> is a pipe-separated flat file recording high-level information about the external <code>callr</code> process that orchestrates the targets. In that text file is the process ID, which can be used to check if <code>tar_make()</code> is still running in certain situations. Notably, it helps Shiny developers make apps that allow the user to log out and then resume the session after logging back in.</p>
+</div>
+<div id="progress" class="section level2" number="2.4">
+<h2><span class="header-section-number">2.4</span> Progress</h2>
+<p>The file <code>_targets/meta/progress</code> is a pipe-separated flat file with the name of each target and it’s current runtime progress (running, built, canceled, or errored). The information in this file helps users keep track of what the pipeline is doing at a given moment. <code>targets</code> periodically appends rows to <code>_targets/meta/progress</code> as the pipeline progresses, so duplicated names usually appear. For any target with duplicated rows in <code>_targets/meta/progress</code>, only the lowest row is valid.</p>
 <p>In most situations, the progress file can be safely excluded from version control. Functions like <code>tar_graph()</code> use progress information, but it is not essential to the reproducible end product.</p>
 </div>
-<div id="metadata" class="section level2" number="2.4">
-<h2><span class="header-section-number">2.4</span> Metadata</h2>
+<div id="metadata" class="section level2" number="2.5">
+<h2><span class="header-section-number">2.5</span> Metadata</h2>
 <p><code>targets</code> uses special metadata to decide which targets are up to date and which need to run. The metadata file <code>_targets/meta/meta</code> is a flat file with one row for every target and every global object relevant to the pipeline. <code>targets</code> appends new rows to this file as the pipeline progresses. Unlike <code>drake</code>, the metadata is centralized and compatible with <code>data.table</code>, which makes it far faster to check which targets are up to date. In addition, the metadata system allows <code>targets</code> to check not only for up-to-date targets, but also up-to-date global objects, which makes it easier for the user to understand <em>why</em> a target is outdated.</p>
 <p><code>_targets/meta/meta</code> has the following columns. Global objects use only the <code>name</code>, <code>type</code>, and <code>data</code> fields.</p>
 <ul>
@@ -282,8 +288,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul>
 <p>These fields are pipe-separated in the flat file. Fields <code>path</code> and <code>children</code> can have multiple character strings, and these character strings are separated by asterisks in storage. (In memory, <code>path</code> and <code>children</code> are list columns.)</p>
 </div>
-<div id="skipping-up-to-date-targets" class="section level2" number="2.5">
-<h2><span class="header-section-number">2.5</span> Skipping up-to-date targets</h2>
+<div id="skipping-up-to-date-targets" class="section level2" number="2.6">
+<h2><span class="header-section-number">2.6</span> Skipping up-to-date targets</h2>
 <p><code>targets</code> uses the metadata to decide if a target is up to date. The <code>should_run()</code> method of the <code>builder</code> class manages this. A target is outdated if one of the following conditions is met. <code>targets</code> checks these rules in the order given below. There is a special <code>cue</code> class to allow the user to customize / suppress most of these rules.</p>
 <ol style="list-style-type: decimal">
 <li>There is no metadata record of the target.</li>
@@ -303,8 +309,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 1. Compute a hash on the preprocessed string above using <code>targets:::digest_chr64()</code>.</p>
 <p>Those functions themselves have dependencies, and those dependencies are detected with <code>codetools::findGlobals()</code>. Dependencies of functions may include other global functions or global objects. If a dependency of a function is invalidated, the function itself is invalidated, and so are any dependent targets with the <code>depend</code> cue turned on.</p>
 </div>
-<div id="databases" class="section level2" number="2.6">
-<h2><span class="header-section-number">2.6</span> Databases</h2>
+<div id="databases" class="section level2" number="2.7">
+<h2><span class="header-section-number">2.7</span> Databases</h2>
 <p><code>targets</code> manages <code>_targets/meta/progress</code> and <code>_targets/meta/meta</code> with an internal <code>database</code> class, which has methods to read, write, and deduplicate entire datasets as well as row-append records for individual targets. To maximize performance, <code>targets</code> uses <code>fread()</code> and <code>fwrite()</code> from <code>data.table</code> when working with entire databases and <code>base::write()</code> to append individual rows. The <code>database</code> class also supports and internal in-memory cache in order to avoid costly interactions with storage.</p>
 <p>Internal classes <code>progress</code> and <code>meta</code> each have a <code>database</code> object and methods specific to the use case. And for additional safety, the <code>record</code> class encapsulates and validates individual rows of metadata.</p>
 
