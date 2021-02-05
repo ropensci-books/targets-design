@@ -15,8 +15,9 @@ When a `targets` pipeline runs, it creates a folder called `_targets` to store a
 ```
 _targets/
 ├── meta/
-├────── progress
 ├────── meta
+├────── process
+├────── progress
 ├── objects/
 ├────── target1 
 ├────── target2
@@ -32,9 +33,13 @@ The number of files equals the number of targets plus two, which makes projects 
 
 With the exception of dynamic files, the return value of each target lives in its own file inside `_targets/objects/`. The file name is the name of the target, and there is no file extension. The metadata keeps track of the storage format that governs how to read and write the target's data. The default format is RDS, so if target `x` has no explicit format, then `readRDS("_targets/objects/x")` will read the data. (However, we state this just for the sake of understanding. The recommended way to read data is `tar_read()`, which takes the storage format into account.)
 
+## Process
+
+The file `_targets/meta/process` is a pipe-separated flat file recording high-level information about the external `callr` process that orchestrates the targets. In that text file is the process ID, which can be used to check if `tar_make()` is still running in certain situations. Notably, it helps Shiny developers make apps that allow the user to log out and then resume the session after logging back in. 
+
 ## Progress
 
-The file `_targets/meta/progress` is a pipe-separated flat file with the name of each target and it's current runtime progress (running, built, cancelled, or errored). The information in this file helps users keep track of what the pipeline is doing at a given moment. `targets` periodically appends rows to `_targets/meta/progress` as the pipeline progresses, so duplicated names usually appear. For any target with duplicated rows in `_targets/meta/progress`, only the lowest row is valid.
+The file `_targets/meta/progress` is a pipe-separated flat file with the name of each target and it's current runtime progress (running, built, canceled, or errored). The information in this file helps users keep track of what the pipeline is doing at a given moment. `targets` periodically appends rows to `_targets/meta/progress` as the pipeline progresses, so duplicated names usually appear. For any target with duplicated rows in `_targets/meta/progress`, only the lowest row is valid.
 
 In most situations, the progress file can be safely excluded from version control. Functions like `tar_graph()` use progress information, but it is not essential to the reproducible end product.
 
