@@ -33,7 +33,7 @@
   <link rel="shortcut icon" href="man/figures/favicon.ico" type="image/x-icon" />
 <link rel="prev" href="classes.html"/>
 <link rel="next" href="orchestration.html"/>
-<script src="libs/header-attrs-2.6/header-attrs.js"></script>
+<script src="libs/header-attrs-2.7/header-attrs.js"></script>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -180,9 +180,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <ul>
 <li class="chapter" data-level="4.2.1" data-path="composition.html"><a href="composition.html#command-class"><i class="fa fa-check"></i><b>4.2.1</b> Command class</a></li>
 <li class="chapter" data-level="4.2.2" data-path="composition.html"><a href="composition.html#settings-class"><i class="fa fa-check"></i><b>4.2.2</b> Settings class</a></li>
-<li class="chapter" data-level="4.2.3" data-path="composition.html"><a href="composition.html#cache-class"><i class="fa fa-check"></i><b>4.2.3</b> Cache class</a></li>
-<li class="chapter" data-level="4.2.4" data-path="composition.html"><a href="composition.html#memory-class"><i class="fa fa-check"></i><b>4.2.4</b> Memory class</a></li>
-<li class="chapter" data-level="4.2.5" data-path="composition.html"><a href="composition.html#value-class"><i class="fa fa-check"></i><b>4.2.5</b> Value class</a></li>
+<li class="chapter" data-level="4.2.3" data-path="composition.html"><a href="composition.html#value-class"><i class="fa fa-check"></i><b>4.2.3</b> Value class</a></li>
 </ul></li>
 <li class="chapter" data-level="4.3" data-path="composition.html"><a href="composition.html#metrics-class"><i class="fa fa-check"></i><b>4.3</b> Metrics class</a>
 <ul>
@@ -234,10 +232,6 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <ul>
 <li>Command</li>
 <li>Settings</li>
-<li>Cache
-<ul>
-<li>Memory</li>
-</ul></li>
 <li>Value</li>
 <li>Metrics</li>
 <li>Store
@@ -279,14 +273,6 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <td>✓</td>
 </tr>
 <tr class="odd">
-<td>Cache</td>
-<td>✓</td>
-<td>✓</td>
-<td>✓</td>
-<td>✓</td>
-<td>✓</td>
-</tr>
-<tr class="even">
 <td>Value</td>
 <td>✓</td>
 <td>✓</td>
@@ -294,7 +280,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <td>✓</td>
 <td>✓</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td>Metrics</td>
 <td>✓</td>
 <td>✓</td>
@@ -302,7 +288,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <td></td>
 <td></td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td>Store</td>
 <td>✓</td>
 <td>✓</td>
@@ -310,7 +296,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <td></td>
 <td></td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td>Subpipeline</td>
 <td>✓</td>
 <td>✓</td>
@@ -318,7 +304,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <td></td>
 <td></td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td>Junction</td>
 <td></td>
 <td>✓</td>
@@ -326,7 +312,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <td></td>
 <td>✓</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td>Pedigree</td>
 <td></td>
 <td></td>
@@ -334,7 +320,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <td>✓</td>
 <td></td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td>Cue</td>
 <td>✓</td>
 <td>✓</td>
@@ -342,7 +328,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <td></td>
 <td></td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td>Patternview</td>
 <td></td>
 <td></td>
@@ -376,16 +362,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h3><span class="header-section-number">4.2.2</span> Settings class</h3>
 <p>A <code>settings</code> object keeps track of the user-defined target-specific configuration settings of the targets, such as the target name, storage format, failure mode, memory management behavior, and branching pattern specification (if applicable).</p>
 </div>
-<div id="cache-class" class="section level3" number="4.2.3">
-<h3><span class="header-section-number">4.2.3</span> Cache class</h3>
-<p>The cache holds the in-memory objects that a command needs in order to run. It contains two <code>memory</code> objects: one for global objects (“imports”) and another for targets. The <code>targets</code> field requires the most maintenance because this is where a target’s upstream dependencies get loaded and unloaded. The package performs a tricky balancing act because a target needs all its dependencies loaded into memory and the time of building, but superfluous objects need to be regularly cleared out in order to conserve resources. Also, buds and branches are loaded under the name of the parent so the command’s expression does not need to change during branching.</p>
-</div>
-<div id="memory-class" class="section level3" number="4.2.4">
-<h3><span class="header-section-number">4.2.4</span> Memory class</h3>
-<p>A <code>memory</code> object is an efficient abstraction around an environment. It contains the environment itself and the names of the objects inside. This layer of abstraction allows us to avoid repeated calls to <code>names()</code>, thus increasing performance.</p>
-</div>
-<div id="value-class" class="section level3" number="4.2.5">
-<h3><span class="header-section-number">4.2.5</span> Value class</h3>
+<div id="value-class" class="section level3" number="4.2.3">
+<h3><span class="header-section-number">4.2.3</span> Value class</h3>
 <p>The <code>value</code> class, also covered in the <code>oop</code> vignette, is a layer around a target’s return value. Having a special <code>value</code> object allows us to easily distinguish between two situations:</p>
 <ol style="list-style-type: decimal">
 <li>The target did not run or load data from storage yet.</li>
@@ -408,7 +386,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <div id="subpipeline" class="section level3" number="4.3.3">
 <h3><span class="header-section-number">4.3.3</span> Subpipeline</h3>
-<p>A <code>subpipeline</code> is not actually a class of its own, it is just a <code>pipeline</code> object with only the direct dependencies of a particular target and no values or cache objects in those dependencies. Its only purpose is to efficiently assist with the mechanics of worker-side retrieval.</p>
+<p>A <code>subpipeline</code> is not actually a class of its own, it is just a <code>pipeline</code> object with only the direct dependencies of a particular target and no <code>value</code> objects in those dependencies. Its only purpose is to efficiently assist with the mechanics of worker-side dependency retrieval.</p>
 </div>
 <div id="junction-class-1" class="section level3" number="4.3.4">
 <h3><span class="header-section-number">4.3.4</span> Junction class</h3>

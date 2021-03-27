@@ -28,8 +28,6 @@ overall-structure
 classes-1
 command-class
 settings-class
-cache-class
-memory-class
 value-class
 metrics-class
 store-class
