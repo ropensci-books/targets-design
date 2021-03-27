@@ -5,7 +5,7 @@ Description: This repository contains the design specification of the 'targets' 
   and the orchestration and branching model. The goal is to help developers contribute
   to core elements of the package. Developers are encouraged to to read
   the rendered output at <https://books.ropensci.org/targets-design>.
-Version: 0.0.1
+Version: 0.3.0.9000
 License: MIT + file LICENSE
 URL: https://books.ropensci.org/targets-design,
   https://github.com/ropensci-books/targets-design
