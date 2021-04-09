@@ -10,10 +10,10 @@ Unlike `drake`, which outsources data and metadata management to an external pac
 
 ## File system
 
-When a `targets` pipeline runs, it creates a folder called `_targets` to store all the files it needs.
+When a `targets` pipeline runs, it creates a folder called `_targets` to store all the files it needs. In `targets` version 0.3.1.9000 and above, users can set the data store path to something other than `_targets` (see [`tar_config_set()`](https://docs.ropensci.org/targets/reference/tar_config_set.html)).
 
 ```
-_targets/
+_targets/ # Configurable with tar_config_set().
 ├── meta/
 ├────── meta
 ├────── process
