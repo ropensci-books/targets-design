@@ -233,8 +233,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>Unlike <code>drake</code>, which outsources data and metadata management to an external package, <code>targets</code> has an entirely custom internal data system. <code>targets</code> goes out of its way to reduce the number of files in storage, centralize the progress data and metadata, assign informative file names, and expose the file system to the user. This approach increases efficiency and portability, and it helps users understand and take control of their data.</p>
 <div id="file-system" class="section level2" number="2.1">
 <h2><span class="header-section-number">2.1</span> File system</h2>
-<p>When a <code>targets</code> pipeline runs, it creates a folder called <code>_targets</code> to store all the files it needs.</p>
-<pre><code>_targets/
+<p>When a <code>targets</code> pipeline runs, it creates a folder called <code>_targets</code> to store all the files it needs. In <code>targets</code> version 0.3.1.9000 and above, users can set the data store path to something other than <code>_targets</code> (see <a href="https://docs.ropensci.org/targets/reference/tar_config_set.html"><code>tar_config_set()</code></a>).</p>
+<pre><code>_targets/ # Configurable with tar_config_set().
 ├── meta/
 ├────── meta
 ├────── process
