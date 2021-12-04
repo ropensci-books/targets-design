@@ -6,12 +6,12 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>Chapter 2 Data and metadata management | The targets R Package Design Specification</title>
   <meta name="description" content="Chapter 2 Data and metadata management | The targets R Package Design Specification" />
-  <meta name="generator" content="bookdown 0.22 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.24 and GitBook 2.6.7" />
 
   <meta property="og:title" content="Chapter 2 Data and metadata management | The targets R Package Design Specification" />
   <meta property="og:type" content="book" />
   <meta property="og:url" content="https://books.ropensci.org/targets-design" />
-  <meta property="og:image" content="https://books.ropensci.org/targets-design//man/figures/logo.png" />
+  <meta property="og:image" content="https://books.ropensci.org/targets-design/man/figures/logo.png" />
   
   <meta name="github-repo" content="ropensci-books/targets-design" />
 
@@ -19,7 +19,7 @@
   <meta name="twitter:title" content="Chapter 2 Data and metadata management | The targets R Package Design Specification" />
   
   
-  <meta name="twitter:image" content="https://books.ropensci.org/targets-design//man/figures/logo.png" />
+  <meta name="twitter:image" content="https://books.ropensci.org/targets-design/man/figures/logo.png" />
 
 <meta name="author" content="Will Landau" />
 <meta name="author" content="Copyright Eli Lilly and Company" />
@@ -33,8 +33,9 @@
   <link rel="shortcut icon" href="man/figures/favicon.ico" type="image/x-icon" />
 <link rel="prev" href="index.html"/>
 <link rel="next" href="classes.html"/>
-<script src="libs/header-attrs-2.7/header-attrs.js"></script>
-<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<script src="libs/header-attrs-2.11/header-attrs.js"></script>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
@@ -42,7 +43,6 @@
 <link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
-
 
 
 
@@ -248,7 +248,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ├────── branching_target_c7bcb4bd
 ├────── branching_target_285fb6a9
 ├────── branching_target_874ca381
-└── scratch/ # Temporary files deleted at the end of tar_make().</code></pre>
+├── scratch/ # tar_make() deletes this folder after it finishes.
+└── user/ # gittargets users can put custom files here for data version control.</code></pre>
 <p>The number of files equals the number of targets plus two, which makes projects easier to upload and share among collaborators than <code>drake</code>’s <code>.drake/</code> cache. (Files in <code>_targets/scratch/</code> do not count because they can all be safely deleted after <code>tar_make()</code>.) However, these files may still be too large and too numerous for code-specific version control systems like Git. For such projects, it may be more appropriate to share caches through external version-aware platforms such as Dropbox, Microsoft OneDrive, and Google Docs.</p>
 </div>
 <div id="targets" class="section level2" number="2.2">
@@ -330,7 +331,6 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
-<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
 <script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
 <script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
 <script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
@@ -360,6 +360,10 @@ gitbook.start({
 "text": null
 },
 "download": null,
+"search": {
+"engine": "fuse",
+"options": null
+},
 "toc": {
 "collapse": "subsection"
 }
