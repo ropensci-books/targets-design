@@ -24,7 +24,8 @@ _targets/ # Configurable with tar_config_set().
 ├────── branching_target_c7bcb4bd
 ├────── branching_target_285fb6a9
 ├────── branching_target_874ca381
-└── scratch/ # Temporary files deleted at the end of tar_make().
+├── scratch/ # tar_make() deletes this folder after it finishes.
+└── user/ # gittargets users can put custom files here for data version control.
 ```
 
 The number of files equals the number of targets plus two, which makes projects easier to upload and share among collaborators than `drake`'s `.drake/` cache. (Files in `_targets/scratch/` do not count because they can all be safely deleted after `tar_make()`.) However, these files may still be too large and too numerous for code-specific version control systems like Git. For such projects, it may be more appropriate to share caches through external version-aware platforms such as Dropbox, Microsoft OneDrive, and Google Docs.
