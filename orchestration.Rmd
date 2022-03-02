@@ -1,6 +1,6 @@
 # Orchestration {#orchestration}
 
-The `targets` package runs the correct targets in the correct order (orchestration) and creates new targets dynamically at runtime (branching). This vignette describes the underlying package structure and mental model that gives `targets` its flexibility and parallel efficiency.
+The `targets` package runs the correct targets in the correct order (orchestration) and creates new targets dynamically at runtime (branching). This chapter describes the underlying package structure and mental model that gives `targets` its flexibility and parallel efficiency.
 
 To orchestrate targets, we iterate on the following loop while there is still at least one target in the queue.
 

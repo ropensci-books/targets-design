@@ -1,6 +1,6 @@
 # The composition of target objects {#composition}
 
-Most of the package's conceptual challenges and intricacies are expressed in the `"target"` class, and this decentralization helps `targets` effectively reason about entire pipelines. This vignette describes the classes that form the building blocks of a target.
+Most of the package's conceptual challenges and intricacies are expressed in the `"target"` class, and this decentralization helps `targets` effectively reason about entire pipelines. This chapter describes the classes that form the building blocks of a target.
 
 ## Overall structure
 
@@ -34,7 +34,7 @@ Pedigree |  |  | ✓ | ✓ | |
 Cue | ✓ | ✓ | ✓ | | |
 Patternview | | | | | ✓ |
 
-The class inheritance hierarchy of targets is below, and the orchestration vignette explains why the package is designed this way.
+The class inheritance hierarchy of targets is below, and the [orchestration chapter](#orchestration) explains why the package is designed this way.
 
 * Target
     * Bud
@@ -55,7 +55,7 @@ A `settings` object keeps track of the user-defined target-specific configuratio
 
 ### Value class
 
-The `value` class, also covered in the `oop` vignette, is a layer around a target's return value. Having a special `value` object allows us to easily distinguish between two situations:
+The `value` class is a layer around a target's return value. Having a special `value` object allows us to easily distinguish between two situations:
 
 1. The target did not run or load data from storage yet.
 1. The target did run, but its expression returned `NULL`.
