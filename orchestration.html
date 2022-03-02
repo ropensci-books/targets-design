@@ -227,7 +227,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
             <section class="normal" id="section-">
 <div id="orchestration" class="section level1" number="5">
 <h1><span class="header-section-number">Chapter 5</span> Orchestration</h1>
-<p>The <code>targets</code> package runs the correct targets in the correct order (orchestration) and creates new targets dynamically at runtime (branching). This vignette describes the underlying package structure and mental model that gives <code>targets</code> its flexibility and parallel efficiency.</p>
+<p>The <code>targets</code> package runs the correct targets in the correct order (orchestration) and creates new targets dynamically at runtime (branching). This chapter describes the underlying package structure and mental model that gives <code>targets</code> its flexibility and parallel efficiency.</p>
 <p>To orchestrate targets, we iterate on the following loop while there is still at least one target in the queue.</p>
 <ol style="list-style-type: decimal">
 <li>If the target at the head of the queue is not ready to build (rank &gt; 0) sleep for a short time.</li>

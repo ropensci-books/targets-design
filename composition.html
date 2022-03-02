@@ -227,7 +227,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
             <section class="normal" id="section-">
 <div id="composition" class="section level1" number="4">
 <h1><span class="header-section-number">Chapter 4</span> The composition of target objects</h1>
-<p>Most of the package’s conceptual challenges and intricacies are expressed in the <code>"target"</code> class, and this decentralization helps <code>targets</code> effectively reason about entire pipelines. This vignette describes the classes that form the building blocks of a target.</p>
+<p>Most of the package’s conceptual challenges and intricacies are expressed in the <code>"target"</code> class, and this decentralization helps <code>targets</code> effectively reason about entire pipelines. This chapter describes the classes that form the building blocks of a target.</p>
 <div id="overall-structure" class="section level2" number="4.1">
 <h2><span class="header-section-number">4.1</span> Overall structure</h2>
 <p>To maximize performance, classes with many instances per workflow are simple environments. Most of these objects lack explicit S3 class attributes, but all of them have formal constructors, helpers, and validators.</p>
@@ -341,7 +341,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </tr>
 </tbody>
 </table>
-<p>The class inheritance hierarchy of targets is below, and the orchestration vignette explains why the package is designed this way.</p>
+<p>The class inheritance hierarchy of targets is below, and the <a href="orchestration.html#orchestration">orchestration chapter</a> explains why the package is designed this way.</p>
 <ul>
 <li>Target
 <ul>
@@ -367,7 +367,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <div id="value-class" class="section level3" number="4.2.3">
 <h3><span class="header-section-number">4.2.3</span> Value class</h3>
-<p>The <code>value</code> class, also covered in the <code>oop</code> vignette, is a layer around a target’s return value. Having a special <code>value</code> object allows us to easily distinguish between two situations:</p>
+<p>The <code>value</code> class is a layer around a target’s return value. Having a special <code>value</code> object allows us to easily distinguish between two situations:</p>
 <ol style="list-style-type: decimal">
 <li>The target did not run or load data from storage yet.</li>
 <li>The target did run, but its expression returned <code>NULL</code>.</li>
