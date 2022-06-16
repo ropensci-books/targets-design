@@ -6,11 +6,10 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>Chapter 5 Orchestration | The targets R Package Design Specification</title>
   <meta name="description" content="Chapter 5 Orchestration | The targets R Package Design Specification" />
-  <meta name="generator" content="bookdown 0.24 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.27 and GitBook 2.6.7" />
 
   <meta property="og:title" content="Chapter 5 Orchestration | The targets R Package Design Specification" />
   <meta property="og:type" content="book" />
-  <meta property="og:url" content="https://books.ropensci.org/targets-design" />
   <meta property="og:image" content="https://books.ropensci.org/targets-design/man/figures/logo.png" />
   
   <meta name="github-repo" content="ropensci-books/targets-design" />
@@ -33,7 +32,6 @@
   <link rel="shortcut icon" href="man/figures/favicon.ico" type="image/x-icon" />
 <link rel="prev" href="composition.html"/>
 
-<script src="libs/header-attrs-2.11/header-attrs.js"></script>
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -51,8 +49,9 @@
 
 
 
-<link href="libs/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
-<script src="libs/anchor-sections-1.0.1/anchor-sections.js"></script>
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
 <!-- Global site tag (gtag.js) - Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=UA-150843595-1"></script>
 <script>
@@ -225,8 +224,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="orchestration" class="section level1" number="5">
-<h1><span class="header-section-number">Chapter 5</span> Orchestration</h1>
+<div id="orchestration" class="section level1 hasAnchor" number="5">
+<h1><span class="header-section-number">Chapter 5</span> Orchestration<a href="orchestration.html#orchestration" class="anchor-section" aria-label="Anchor link to header"></a></h1>
 <p>The <code>targets</code> package runs the correct targets in the correct order (orchestration) and creates new targets dynamically at runtime (branching). This chapter describes the underlying package structure and mental model that gives <code>targets</code> its flexibility and parallel efficiency.</p>
 <p>To orchestrate targets, we iterate on the following loop while there is still at least one target in the queue.</p>
 <ol style="list-style-type: decimal">
@@ -273,12 +272,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li>Insert new targets dynamically.</li>
 </ol>
 <p>For patterns, <code>conclude()</code> is called twice: once to spawn branches, and then again when all the branches are done.</p>
-<div id="decrement-the-ranks-of-downstream-targets-in-the-priority-queue." class="section level2" number="5.1">
-<h2><span class="header-section-number">5.1</span> Decrement the ranks of downstream targets in the priority queue.</h2>
+<div id="decrement-the-ranks-of-downstream-targets-in-the-priority-queue." class="section level2 hasAnchor" number="5.1">
+<h2><span class="header-section-number">5.1</span> Decrement the ranks of downstream targets in the priority queue.<a href="orchestration.html#decrement-the-ranks-of-downstream-targets-in-the-priority-queue." class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>The <code>conclude()</code> method decrements ranks in the priority queue to signal that downstream neighbors are one step closer to being ready to build. Most targets decrement all their downstream neighbors, but a pattern only decrement the neighbors that branch over it. This behavior for patterns is key because it allows future patterns to quickly define new branches before the current ones even start running, which contributes to parallel efficiency.</p>
 </div>
-<div id="insert-new-targets-dynamically." class="section level2" number="5.2">
-<h2><span class="header-section-number">5.2</span> Insert new targets dynamically.</h2>
+<div id="insert-new-targets-dynamically." class="section level2 hasAnchor" number="5.2">
+<h2><span class="header-section-number">5.2</span> Insert new targets dynamically.<a href="orchestration.html#insert-new-targets-dynamically." class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p><code>targets</code> creates new targets dynamically when stems and patterns conclude. To illustrate, let us use the following example pipeline.</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="orchestration.html#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># _targets.R</span></span>
 <span id="cb2-2"><a href="orchestration.html#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(targets)</span>
@@ -299,8 +298,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul>
 <p>Graphical representation:</p>
 <p><img src="man/figures/orchestration-start.png" /></p>
-<div id="insert-buds" class="section level3" number="5.2.1">
-<h3><span class="header-section-number">5.2.1</span> Insert buds</h3>
+<div id="insert-buds" class="section level3 hasAnchor" number="5.2.1">
+<h3><span class="header-section-number">5.2.1</span> Insert buds<a href="orchestration.html#insert-buds" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>Upon conclusion, <code>data2</code> creates buds to help its downstream neighbor <code>analysis</code> map over it later on. <code>data1</code> creates no buds because no pattern branches over it.</p>
 <p><img src="man/figures/orchestration-data2.png" /></p>
 <p>To insert the buds, we:</p>
@@ -311,8 +310,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ol>
 <p>We do not need to update the scheduler because the parent stem of the buds already completed. In other words, buds are born built. They exist as separate data objects in memory, but they have no dedicated storage.</p>
 </div>
-<div id="insert-branches" class="section level3" number="5.2.2">
-<h3><span class="header-section-number">5.2.2</span> Insert branches</h3>
+<div id="insert-branches" class="section level3 hasAnchor" number="5.2.2">
+<h3><span class="header-section-number">5.2.2</span> Insert branches<a href="orchestration.html#insert-branches" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>With the buds in place, the <code>analysis</code> pattern can now create branches that depend on each of the respective buds of <code>data2</code>. After they run, the branches exist as separate data objects in memory and storage. The full aggregated <code>analysis</code> pattern is not needed, so it is never created.</p>
 <p><img src="man/figures/orchestration-analysis.png" /></p>
 <p>As soon as these first branches are created, we can create the branches for <code>validation</code>. It does not matter if <code>analysis_5c77a278</code> and <code>analysis_3439bce3</code> are both still queued. In addition, as soon as <code>analysis_5c77a278</code> is built, <code>validation_0f7f2822</code> can start building regardless of whether <code>analysis_3439bce3</code> is complete. This is a major source of parallel efficiency.</p>

@@ -6,11 +6,10 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>Chapter 3 Major internal classes | The targets R Package Design Specification</title>
   <meta name="description" content="Chapter 3 Major internal classes | The targets R Package Design Specification" />
-  <meta name="generator" content="bookdown 0.24 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.27 and GitBook 2.6.7" />
 
   <meta property="og:title" content="Chapter 3 Major internal classes | The targets R Package Design Specification" />
   <meta property="og:type" content="book" />
-  <meta property="og:url" content="https://books.ropensci.org/targets-design" />
   <meta property="og:image" content="https://books.ropensci.org/targets-design/man/figures/logo.png" />
   
   <meta name="github-repo" content="ropensci-books/targets-design" />
@@ -33,7 +32,6 @@
   <link rel="shortcut icon" href="man/figures/favicon.ico" type="image/x-icon" />
 <link rel="prev" href="data.html"/>
 <link rel="next" href="composition.html"/>
-<script src="libs/header-attrs-2.11/header-attrs.js"></script>
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -51,8 +49,9 @@
 
 
 
-<link href="libs/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
-<script src="libs/anchor-sections-1.0.1/anchor-sections.js"></script>
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
 <!-- Global site tag (gtag.js) - Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=UA-150843595-1"></script>
 <script>
@@ -225,19 +224,19 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="classes" class="section level1" number="3">
-<h1><span class="header-section-number">Chapter 3</span> Major internal classes</h1>
+<div id="classes" class="section level1 hasAnchor" number="3">
+<h1><span class="header-section-number">Chapter 3</span> Major internal classes<a href="classes.html#classes" class="anchor-section" aria-label="Anchor link to header"></a></h1>
 <p><code>targets</code> relies heavily on object-oriented programming, and the following subsections describe the major classes of objects relevant to orchestration and branching. Objects that appear once per workflow are instances of <code>R6</code> classes. To maximize performance, target-specific data structures are lower-tech classes: simple environments with formal constructors, helpers, and validators.</p>
-<div id="algorithm-class" class="section level2" number="3.1">
-<h2><span class="header-section-number">3.1</span> Algorithm class</h2>
+<div id="algorithm-class" class="section level2 hasAnchor" number="3.1">
+<h2><span class="header-section-number">3.1</span> Algorithm class<a href="classes.html#algorithm-class" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>An algorithm in <code>targets</code> is an abstract class that represents how to iterate through the pipeline target by target. Different algorithms describe different kinds of deployment: for example, execution in the main process on the host machine versus parallel execution on a cluster. Every algorithm has a scheduler object and a pipeline object.</p>
 </div>
-<div id="pipeline-class" class="section level2" number="3.2">
-<h2><span class="header-section-number">3.2</span> Pipeline class</h2>
+<div id="pipeline-class" class="section level2 hasAnchor" number="3.2">
+<h2><span class="header-section-number">3.2</span> Pipeline class<a href="classes.html#pipeline-class" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>A pipeline is a wrapper around a collection of targets, and it is responsible for the initial reasoning about the topology of the pipeline before runtime. Pipelines express their reasoning by producing static graphs and scheduler objects early on. In addition, pipelines contain new buds and branches created dynamically during the pipeline.</p>
 </div>
-<div id="scheduler-class" class="section level2" number="3.3">
-<h2><span class="header-section-number">3.3</span> Scheduler class</h2>
+<div id="scheduler-class" class="section level2 hasAnchor" number="3.3">
+<h2><span class="header-section-number">3.3</span> Scheduler class<a href="classes.html#scheduler-class" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>Whereas pipelines are responsible for <em>static</em> topology, schedulers are responsible for <em>dynamic</em> topology. Schedulers know</p>
 <ol style="list-style-type: decimal">
 <li>The upstream and downstream neighbors of each target.</li>
@@ -251,25 +250,25 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li>A priority queue.</li>
 </ol>
 </div>
-<div id="graph-class" class="section level2" number="3.4">
-<h2><span class="header-section-number">3.4</span> Graph class</h2>
+<div id="graph-class" class="section level2 hasAnchor" number="3.4">
+<h2><span class="header-section-number">3.4</span> Graph class<a href="classes.html#graph-class" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>The graph class keeps track of the upstream and downstream neighbors of each target. The scheduler adds edges to the graph when new targets are created dynamically.</p>
 <p>The graph is implemented as two adjacency lists: one for upstream edges and another for downstream edges. For the purposes of powering a pipeline, we find this low-tech structure to be more efficient than <code>igraph</code> in our situation where we repeatedly query the graph and the number of nodes is small. (Transient <code>igraph</code> objects, however, are created for validation and visualization purposes.)</p>
 </div>
-<div id="progress-class" class="section level2" number="3.5">
-<h2><span class="header-section-number">3.5</span> Progress class</h2>
+<div id="progress-class" class="section level2 hasAnchor" number="3.5">
+<h2><span class="header-section-number">3.5</span> Progress class<a href="classes.html#progress-class" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>The progress class keeps track of the state of each target: queued, running, skipped, built, outdated, canceled, or errored. To accomplish this, the progress object maintains a counter object for each category.</p>
 </div>
-<div id="queue-class" class="section level2" number="3.6">
-<h2><span class="header-section-number">3.6</span> Queue class</h2>
+<div id="queue-class" class="section level2 hasAnchor" number="3.6">
+<h2><span class="header-section-number">3.6</span> Queue class<a href="classes.html#queue-class" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>The queue class is a priority queue, essentially a wrapper around a named integer vector of ranks. For <code>targets</code>’ purposes, the rank of a target is the number of unmet dependencies so far, minus a per-target priority value in the interval <code>[0, 1)</code> to control the order in which targets are dequeued. As the pipeline progresses, the queue is checked and modified periodically as dependencies are met. The next target to build is the lowest rank target such that <code>-1L &lt; rank &lt;= 0L</code>. Branches are pushed to the queue when they are dynamically created.</p>
 </div>
-<div id="counter-class" class="section level2" number="3.7">
-<h2><span class="header-section-number">3.7</span> Counter class</h2>
+<div id="counter-class" class="section level2 hasAnchor" number="3.7">
+<h2><span class="header-section-number">3.7</span> Counter class<a href="classes.html#counter-class" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>A counter is an efficient abstraction for keeping track of target membership in a category. A counter stores the number of targets in the category and a hash table with the names of those targets. Counters are used to efficiently keep track of runtime progress (e.g. running, queued, or built) as well membership in the queue.</p>
 </div>
-<div id="target-class" class="section level2" number="3.8">
-<h2><span class="header-section-number">3.8</span> Target class</h2>
+<div id="target-class" class="section level2 hasAnchor" number="3.8">
+<h2><span class="header-section-number">3.8</span> Target class<a href="classes.html#target-class" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>A target is an abstract class for a step of a pipeline. Each target is a composite of intricate sub-classes that keep track of commands, in-memory dependencies, storage, settings, and some aspects of build behavior. As its name implies, the <code>targets</code> package pushes most of its conceptual complexity to the target level in order to decentralize the architecture and make it much easier to reason about the pipeline as a whole.</p>
 <p>There are multiple sub-classes of targets, and the different behaviors of different sub-classes drive the orchestration and branching of targets. The inheritance hierarchy is as follows.</p>
 <ul>
@@ -285,28 +284,28 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 </ul>
 </div>
-<div id="stem-class" class="section level2" number="3.9">
-<h2><span class="header-section-number">3.9</span> Stem class</h2>
+<div id="stem-class" class="section level2 hasAnchor" number="3.9">
+<h2><span class="header-section-number">3.9</span> Stem class<a href="classes.html#stem-class" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>A stem is the most basic form of target. It is neither a pattern nor part of a pattern. However, it can dynamically create buds to assist with branching.</p>
 </div>
-<div id="bud-class" class="section level2" number="3.10">
-<h2><span class="header-section-number">3.10</span> Bud class</h2>
+<div id="bud-class" class="section level2 hasAnchor" number="3.10">
+<h2><span class="header-section-number">3.10</span> Bud class<a href="classes.html#bud-class" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>A bud is a target that simply contains part of a stem’s value in memory. The purpose of a bud is to serve as a dependency of a branch when a pattern branches over a stem.</p>
 </div>
-<div id="pattern-class" class="section level2" number="3.11">
-<h2><span class="header-section-number">3.11</span> Pattern class</h2>
+<div id="pattern-class" class="section level2 hasAnchor" number="3.11">
+<h2><span class="header-section-number">3.11</span> Pattern class<a href="classes.html#pattern-class" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>A pattern is an abstract class responsible for creating new branches and dynamically updating the scheduler. Stems and patterns are the only targets the user manually defines in the pipeline.</p>
 </div>
-<div id="branch-class" class="section level2" number="3.12">
-<h2><span class="header-section-number">3.12</span> Branch class</h2>
+<div id="branch-class" class="section level2 hasAnchor" number="3.12">
+<h2><span class="header-section-number">3.12</span> Branch class<a href="classes.html#branch-class" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>A branch is a target that a pattern creates dynamically at runtime.</p>
 </div>
-<div id="builder-class" class="section level2" number="3.13">
-<h2><span class="header-section-number">3.13</span> Builder class</h2>
+<div id="builder-class" class="section level2 hasAnchor" number="3.13">
+<h2><span class="header-section-number">3.13</span> Builder class<a href="classes.html#builder-class" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>Stems and branches have a lot in common: they actually run R commands, and the write the return values to storage. A builder is an abstract class to contain the heavy lifting that stems and branches both do.</p>
 </div>
-<div id="junction-class" class="section level2" number="3.14">
-<h2><span class="header-section-number">3.14</span> Junction class</h2>
+<div id="junction-class" class="section level2 hasAnchor" number="3.14">
+<h2><span class="header-section-number">3.14</span> Junction class<a href="classes.html#junction-class" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>A junction is a manifest of the buds or branches (children) that a stem or pattern dynamically creates, and it depends on the user-specified <code>pattern</code> argument to <code>tar_target()</code>, e.g. <code>tar_target(..., pattern = cross(x, map(y, z)))</code>.</p>
 
 </div>

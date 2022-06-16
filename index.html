@@ -6,11 +6,10 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>The targets R Package Design Specification</title>
   <meta name="description" content="The targets R Package Design Specification" />
-  <meta name="generator" content="bookdown 0.24 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.27 and GitBook 2.6.7" />
 
   <meta property="og:title" content="The targets R Package Design Specification" />
   <meta property="og:type" content="book" />
-  <meta property="og:url" content="https://books.ropensci.org/targets-design" />
   <meta property="og:image" content="https://books.ropensci.org/targets-design/man/figures/logo.png" />
   
   <meta name="github-repo" content="ropensci-books/targets-design" />
@@ -33,7 +32,6 @@
   <link rel="shortcut icon" href="man/figures/favicon.ico" type="image/x-icon" />
 
 <link rel="next" href="data.html"/>
-<script src="libs/header-attrs-2.11/header-attrs.js"></script>
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -51,8 +49,9 @@
 
 
 
-<link href="libs/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
-<script src="libs/anchor-sections-1.0.1/anchor-sections.js"></script>
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
 <!-- Global site tag (gtag.js) - Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=UA-150843595-1"></script>
 <script>
@@ -230,11 +229,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p class="author"><em>Will Landau</em></p>
 <p class="author"><em>Copyright Eli Lilly and Company</em></p>
 </div>
-<div id="design" class="section level1" number="1">
-<h1><span class="header-section-number">Chapter 1</span> Introduction</h1>
+<div id="design" class="section level1 hasAnchor" number="1">
+<h1><span class="header-section-number">Chapter 1</span> Introduction<a href="index.html#design" class="anchor-section" aria-label="Anchor link to header"></a></h1>
 <p>The <a href="https://github.com/ropensci/targets"><code>targets</code></a> package is a <a href="https://www.gnu.org/software/make/">Make</a>-like pipeline toolkit for Statistics and data science in R. With <a href="https://github.com/ropensci/targets"><code>targets</code></a>, you can maintain a reproducible workflow without repeating yourself. <a href="https://github.com/ropensci/targets"><code>targets</code></a> learns how your pipeline fits together, skips costly runtime for tasks that are already up to date, runs only the necessary computation, supports implicit parallel computing, abstracts files as R objects, and shows tangible evidence that the results match the underlying code and data.</p>
-<div id="design-1" class="section level2" number="1.1">
-<h2><span class="header-section-number">1.1</span> Design</h2>
+<div id="design-1" class="section level2 hasAnchor" number="1.1">
+<h2><span class="header-section-number">1.1</span> Design<a href="index.html#design-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p><a href="https://github.com/ropensci/targets"><code>targets</code></a> has an elaborate structure to support its advanced features while ensuring decent performance. This <code>bookdown</code> site is a design specification to explain the major aspects of the internal architecture, including the data storage model, object oriented design, and orchestration and branching model.</p>
 
 </div>

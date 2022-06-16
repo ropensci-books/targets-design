@@ -6,11 +6,10 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>Chapter 4 The composition of target objects | The targets R Package Design Specification</title>
   <meta name="description" content="Chapter 4 The composition of target objects | The targets R Package Design Specification" />
-  <meta name="generator" content="bookdown 0.24 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.27 and GitBook 2.6.7" />
 
   <meta property="og:title" content="Chapter 4 The composition of target objects | The targets R Package Design Specification" />
   <meta property="og:type" content="book" />
-  <meta property="og:url" content="https://books.ropensci.org/targets-design" />
   <meta property="og:image" content="https://books.ropensci.org/targets-design/man/figures/logo.png" />
   
   <meta name="github-repo" content="ropensci-books/targets-design" />
@@ -33,7 +32,6 @@
   <link rel="shortcut icon" href="man/figures/favicon.ico" type="image/x-icon" />
 <link rel="prev" href="classes.html"/>
 <link rel="next" href="orchestration.html"/>
-<script src="libs/header-attrs-2.11/header-attrs.js"></script>
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -51,8 +49,9 @@
 
 
 
-<link href="libs/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
-<script src="libs/anchor-sections-1.0.1/anchor-sections.js"></script>
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
 <!-- Global site tag (gtag.js) - Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=UA-150843595-1"></script>
 <script>
@@ -225,11 +224,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="composition" class="section level1" number="4">
-<h1><span class="header-section-number">Chapter 4</span> The composition of target objects</h1>
+<div id="composition" class="section level1 hasAnchor" number="4">
+<h1><span class="header-section-number">Chapter 4</span> The composition of target objects<a href="composition.html#composition" class="anchor-section" aria-label="Anchor link to header"></a></h1>
 <p>Most of the package’s conceptual challenges and intricacies are expressed in the <code>"target"</code> class, and this decentralization helps <code>targets</code> effectively reason about entire pipelines. This chapter describes the classes that form the building blocks of a target.</p>
-<div id="overall-structure" class="section level2" number="4.1">
-<h2><span class="header-section-number">4.1</span> Overall structure</h2>
+<div id="overall-structure" class="section level2 hasAnchor" number="4.1">
+<h2><span class="header-section-number">4.1</span> Overall structure<a href="composition.html#overall-structure" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>To maximize performance, classes with many instances per workflow are simple environments. Most of these objects lack explicit S3 class attributes, but all of them have formal constructors, helpers, and validators.</p>
 <p>The following classes define specialized objects for the fields of targets.</p>
 <ul>
@@ -355,18 +354,18 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 </ul>
 </div>
-<div id="classes-1" class="section level2" number="4.2">
-<h2><span class="header-section-number">4.2</span> Classes</h2>
-<div id="command-class" class="section level3" number="4.2.1">
-<h3><span class="header-section-number">4.2.1</span> Command class</h3>
+<div id="classes-1" class="section level2 hasAnchor" number="4.2">
+<h2><span class="header-section-number">4.2</span> Classes<a href="composition.html#classes-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="command-class" class="section level3 hasAnchor" number="4.2.1">
+<h3><span class="header-section-number">4.2.1</span> Command class<a href="composition.html#command-class" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>A <code>command</code> object is an abstraction around an R code chunk. It contains an R expression, the names of packages and object dependencies that the expression needs to in order to run, the random seed to run it with, and a string and hash of the expression. The hash is used to help determine if the target is already up to date.</p>
 </div>
-<div id="settings-class" class="section level3" number="4.2.2">
-<h3><span class="header-section-number">4.2.2</span> Settings class</h3>
+<div id="settings-class" class="section level3 hasAnchor" number="4.2.2">
+<h3><span class="header-section-number">4.2.2</span> Settings class<a href="composition.html#settings-class" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>A <code>settings</code> object keeps track of the user-defined target-specific configuration settings of the targets, such as the target name, storage format, failure mode, memory management behavior, and branching pattern specification (if applicable).</p>
 </div>
-<div id="value-class" class="section level3" number="4.2.3">
-<h3><span class="header-section-number">4.2.3</span> Value class</h3>
+<div id="value-class" class="section level3 hasAnchor" number="4.2.3">
+<h3><span class="header-section-number">4.2.3</span> Value class<a href="composition.html#value-class" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>The <code>value</code> class is a layer around a target’s return value. Having a special <code>value</code> object allows us to easily distinguish between two situations:</p>
 <ol style="list-style-type: decimal">
 <li>The target did not run or load data from storage yet.</li>
@@ -376,35 +375,35 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>In addition, the <code>value</code> class has sub-classes for different data iteration/aggregation methods. Users can choose either list-like aggregation and slicing or <code>vctrs</code>-powered aggregation and slicing. This functionality comes in handy for branching.</p>
 </div>
 </div>
-<div id="metrics-class" class="section level2" number="4.3">
-<h2><span class="header-section-number">4.3</span> Metrics class</h2>
+<div id="metrics-class" class="section level2 hasAnchor" number="4.3">
+<h2><span class="header-section-number">4.3</span> Metrics class<a href="composition.html#metrics-class" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>A <code>metrics</code> object stores metadata metrics about the instance of a target’s build, including runtime, as well as warnings, error messages, and tracebacks if applicable. Initially, the <code>metrics</code> object is creates as part of a <code>build</code> object, which is returned by a <code>command</code> object when it is run. Very soon after, the metrics and return value are separated out from the <code>build</code> object and placed directly in the <code>target</code> object.</p>
-<div id="store-class" class="section level3" number="4.3.1">
-<h3><span class="header-section-number">4.3.1</span> Store class</h3>
+<div id="store-class" class="section level3 hasAnchor" number="4.3.1">
+<h3><span class="header-section-number">4.3.1</span> Store class<a href="composition.html#store-class" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>A <code>store</code> object describes how a <code>target</code> stores and queries its return value in file system storage. It contains a <code>file</code> object, as well as methods for managing the file, such as reading, writing, and decisions that involve hashes. The user-selected format of the target in <code>settings</code> determines the sub-class of the <code>store</code>.</p>
 </div>
-<div id="file-class" class="section level3" number="4.3.2">
-<h3><span class="header-section-number">4.3.2</span> File class</h3>
+<div id="file-class" class="section level3 hasAnchor" number="4.3.2">
+<h3><span class="header-section-number">4.3.2</span> File class<a href="composition.html#file-class" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>A <code>file</code> object is an abstraction of a collection of files and directories. It contains the paths, as well as the hash, maximum time stamp, and total storage size of the aggregate. The latter two metrics help decide whether to recompute a computationally expensive hash or trust that the hash is already up to date.</p>
 </div>
-<div id="subpipeline" class="section level3" number="4.3.3">
-<h3><span class="header-section-number">4.3.3</span> Subpipeline</h3>
+<div id="subpipeline" class="section level3 hasAnchor" number="4.3.3">
+<h3><span class="header-section-number">4.3.3</span> Subpipeline<a href="composition.html#subpipeline" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>A <code>subpipeline</code> is not actually a class of its own, it is just a <code>pipeline</code> object with only the direct dependencies of a particular target and no <code>value</code> objects in those dependencies. Its only purpose is to efficiently assist with the mechanics of worker-side dependency retrieval.</p>
 </div>
-<div id="junction-class-1" class="section level3" number="4.3.4">
-<h3><span class="header-section-number">4.3.4</span> Junction class</h3>
+<div id="junction-class-1" class="section level3 hasAnchor" number="4.3.4">
+<h3><span class="header-section-number">4.3.4</span> Junction class<a href="composition.html#junction-class-1" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>A <code>junction</code> serves as a branching specification for patterns and a budding specification for <code>stems</code>. It contains the name of the parent pattern or stem, the names of the children (buds or branches), and the names of the dependencies of each bud or branch. The junction is the explicit representation of the user-defined <code>pattern</code> argument of <code>tar_target()</code> combined with the hashes of the available dependencies.</p>
 </div>
-<div id="pedigree-class" class="section level3" number="4.3.5">
-<h3><span class="header-section-number">4.3.5</span> Pedigree class</h3>
+<div id="pedigree-class" class="section level3 hasAnchor" number="4.3.5">
+<h3><span class="header-section-number">4.3.5</span> Pedigree class<a href="composition.html#pedigree-class" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>Whereas junctions are branching specifications for stems and patterns, pedigrees are branching specifications for buds and branches. A pedigree has the name of the parent (pattern or stem) the name of the child (bud or branch) and the integer index of the child in the parent’s junction.</p>
 </div>
-<div id="cue-class" class="section level3" number="4.3.6">
-<h3><span class="header-section-number">4.3.6</span> Cue class</h3>
+<div id="cue-class" class="section level3 hasAnchor" number="4.3.6">
+<h3><span class="header-section-number">4.3.6</span> Cue class<a href="composition.html#cue-class" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>A cue object is a collection of rules for deciding whether a target is up to date. <code>targets</code> allows the user to activate or suppress some of these rules to change the conditions under which targets rerun.</p>
 </div>
-<div id="patternview-class" class="section level3" number="4.3.7">
-<h3><span class="header-section-number">4.3.7</span> Patternview class</h3>
+<div id="patternview-class" class="section level3 hasAnchor" number="4.3.7">
+<h3><span class="header-section-number">4.3.7</span> Patternview class<a href="composition.html#patternview-class" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>A patternview object keeps track of the overall status of a all a pattern’s branches as a group. Its helps make it more efficient to keep track of the progress, runtime, and storage size of an entire pattern.</p>
 
 </div>
