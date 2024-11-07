@@ -30,6 +30,8 @@ _targets/ # Configurable with tar_config_set().
 
 The number of files equals the number of targets plus two, which makes projects easier to upload and share among collaborators than `drake`'s `.drake/` cache. (Files in `_targets/scratch/` do not count because they can all be safely deleted after `tar_make()`.) However, these files may still be too large and too numerous for code-specific version control systems like Git. For such projects, it may be more appropriate to share caches through external version-aware platforms such as Dropbox, Microsoft OneDrive, and Google Docs.
 
+The exception to this data structure is content-addressable storage as explained in the documentation of `targets::tar_repository_cas()`.
+
 ## Targets
 
 With the exception of dynamic files, the return value of each target lives in its own file inside `_targets/objects/`. The file name is the name of the target, and there is no file extension. The metadata keeps track of the storage format that governs how to read and write the target's data. The default format is RDS, so if target `x` has no explicit format, then `readRDS("_targets/objects/x")` will read the data. (However, we state this just for the sake of understanding. The recommended way to read data is `tar_read()`, which takes the storage format into account.)
@@ -82,8 +84,10 @@ These fields are pipe-separated in the flat file. Fields `path` and `children` c
 1. The `command` metadata field (the hash of the R command) is different from last time.
 1. The `depend` metadata field (the hash of the immediate upstream dependency targets and global objects) is different from last time.
 1. The storage `format` (user-specified with `tar_target()` or `tar_option_set()`) is different from last time.
+1. The storage `repository`` (user-specified with `tar_target()` or `tar_option_set()`) is different from last time.
 1. The `iteration` method (user-specified with `tar_target()` or `tar_option_set()`) is different from last time.
 1. A target's file (either the one in `_targets/objects/` or a dynamic file) does not exist or changed since last time.
+1. The target-specific random number generator seed is different from last time.
 
 A target's dependencies can include functions, and these functions are tracked for changes using a custom hashing procedure. When a function's hash changes, the function is considered invalidated, and so are any downstream targets with the `depend` cue turned on. The `targets` package computes the hash of a function in the following way.
 

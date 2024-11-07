@@ -13,10 +13,9 @@ The following classes define specialized objects for the fields of targets.
 * Value
 * Metrics
 * Store
-    * File
+* File
 * Subpipeline
 * Junction
-* Pedigree
 * Cue
 
 Some types of targets need only some of these objects as fields.
@@ -30,7 +29,6 @@ Metrics | ✓ | ✓ | ✓ | | |
 Store | ✓ | ✓ | ✓ | | |
 Subpipeline | ✓ | ✓ | ✓ |  | |
 Junction |  | ✓ |  | | ✓ |
-Pedigree |  |  | ✓ | ✓ | |
 Cue | ✓ | ✓ | ✓ | | |
 Patternview | | | | | ✓ |
 
@@ -83,10 +81,6 @@ A `subpipeline` is not actually a class of its own, it is just a `pipeline` obje
 ### Junction class
 
 A `junction` serves as a branching specification for patterns and a budding specification for `stems`. It contains the name of the parent pattern or stem, the names of the children (buds or branches), and the names of the dependencies of each bud or branch. The junction is the explicit representation of the user-defined `pattern` argument of `tar_target()` combined with the hashes of the available dependencies.
-
-### Pedigree class
-
-Whereas junctions are branching specifications for stems and patterns, pedigrees are branching specifications for buds and branches. A pedigree has the name of the parent (pattern or stem) the name of the child (bud or branch) and the integer index of the child in the parent's junction.
 
 ### Cue class
 
