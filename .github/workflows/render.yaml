@@ -17,15 +17,6 @@ jobs:
       - uses: r-lib/actions/setup-pandoc@v2
       - uses: quarto-dev/quarto-actions/setup@v2
 
-      - name: Cache results
-        uses: actions/cache@v4.1.2
-        with:
-          path: |
-            _book
-            _freeze
-          key: book-render-${{ hashFiles('**/*qmd') }}
-          restore-keys: book-render-
-
       - name: Render
         run: quarto render
 
