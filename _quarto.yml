@@ -1,0 +1,22 @@
+project:
+  type: book
+
+book:
+  title: "The {targets} R package design specification"
+  author: "Will Landau"
+  site-url: https://books.ropensci.org/targets-design/
+  repo-url: https://github.com/ropensci-books/targets-design/
+  repo-branch: main
+  repo-actions: [edit]
+  sharing: [twitter, facebook, linkedin]
+  page-footer: "How to get help: <https://books.ropensci.org/targets/help.html><br>Copyright 2024, Eli Lilly and Company" 
+  chapters:
+    - index.qmd
+    - data.qmd
+    - classes.qmd
+    - composition.qmd
+    - orchestration.qmd
+
+format:
+  html:
+    theme: cosmo

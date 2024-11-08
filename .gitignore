@@ -7,3 +7,5 @@ _bookdown_files
 _targets.R
 _targets/
 targets-manual.Rmd
+
+/.quarto/

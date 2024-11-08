@@ -26,10 +26,11 @@ Command | ✓ | ✓ | ✓ | ✓ | ✓ |
 Settings | ✓ | ✓ | ✓ | ✓ | ✓ |
 Value | ✓ | ✓ | ✓ | ✓ | ✓ |
 Metrics | ✓ | ✓ | ✓ | | |
-Store | ✓ | ✓ | ✓ | | |
+Store | ✓ | ✓ | ✓ | | ✓ |
+File | ✓ | ✓ | ✓ | |  |
 Subpipeline | ✓ | ✓ | ✓ |  | |
 Junction |  | ✓ |  | | ✓ |
-Cue | ✓ | ✓ | ✓ | | |
+Cue | ✓ | ✓ | ✓ | | ✓ |
 Patternview | | | | | ✓ |
 
 The class inheritance hierarchy of targets is below, and the [orchestration chapter](#orchestration) explains why the package is designed this way.
