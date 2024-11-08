@@ -35,7 +35,7 @@ The `conclude()` method decrements ranks in the priority queue to signal that do
 
 `targets` creates new targets dynamically when stems and patterns conclude. To illustrate, let us use the following example pipeline.
 
-```{r, eval = FALSE}
+```r
 # _targets.R
 library(targets)
 source("functions.R") # Defines all the functions below prefixed with "user_".
