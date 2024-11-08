@@ -1,274 +1,259 @@
 <!DOCTYPE html>
-<html lang="" xml:lang="">
-<head>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
-  <meta charset="utf-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Chapter 3 Major internal classes | The targets R Package Design Specification</title>
-  <meta name="description" content="Chapter 3 Major internal classes | The targets R Package Design Specification" />
-  <meta name="generator" content="bookdown 0.27 and GitBook 2.6.7" />
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.5.57">
 
-  <meta property="og:title" content="Chapter 3 Major internal classes | The targets R Package Design Specification" />
-  <meta property="og:type" content="book" />
-  <meta property="og:image" content="https://books.ropensci.org/targets-design/man/figures/logo.png" />
-  
-  <meta name="github-repo" content="ropensci-books/targets-design" />
-
-  <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Chapter 3 Major internal classes | The targets R Package Design Specification" />
-  
-  
-  <meta name="twitter:image" content="https://books.ropensci.org/targets-design/man/figures/logo.png" />
-
-<meta name="author" content="Will Landau" />
-<meta name="author" content="Copyright Eli Lilly and Company" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
-  <link rel="apple-touch-icon-precomposed" sizes="120x120" href="man/figures/apple-touch-icon.png" />
-  <link rel="shortcut icon" href="man/figures/favicon.ico" type="image/x-icon" />
-<link rel="prev" href="data.html"/>
-<link rel="next" href="composition.html"/>
-<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
-<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
-<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
-<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
-<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
-<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
-<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
-<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
-
-
-
-
-
-
-
-
-<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
-<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
-<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
-<!-- Global site tag (gtag.js) - Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=UA-150843595-1"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'UA-150843595-1');
-</script>
-
-
-<style type="text/css">
-pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
-pre > code.sourceCode > span:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
-pre.sourceCode { margin: 0; }
-@media screen {
-div.sourceCode { overflow: auto; }
+<title>3&nbsp; Major internal classes – The {targets} R package design specification</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
 }
-@media print {
-pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
-}
-pre.numberSource code
-  { counter-reset: source-line 0; }
-pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
-pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-    color: #aaaaaa;
-  }
-pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
-div.sourceCode
-  {   }
-@media screen {
-pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
-}
-code span.al { color: #ff0000; font-weight: bold; } /* Alert */
-code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
-code span.at { color: #7d9029; } /* Attribute */
-code span.bn { color: #40a070; } /* BaseN */
-code span.bu { } /* BuiltIn */
-code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
-code span.ch { color: #4070a0; } /* Char */
-code span.cn { color: #880000; } /* Constant */
-code span.co { color: #60a0b0; font-style: italic; } /* Comment */
-code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
-code span.do { color: #ba2121; font-style: italic; } /* Documentation */
-code span.dt { color: #902000; } /* DataType */
-code span.dv { color: #40a070; } /* DecVal */
-code span.er { color: #ff0000; font-weight: bold; } /* Error */
-code span.ex { } /* Extension */
-code span.fl { color: #40a070; } /* Float */
-code span.fu { color: #06287e; } /* Function */
-code span.im { } /* Import */
-code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
-code span.kw { color: #007020; font-weight: bold; } /* Keyword */
-code span.op { color: #666666; } /* Operator */
-code span.ot { color: #007020; } /* Other */
-code span.pp { color: #bc7a00; } /* Preprocessor */
-code span.sc { color: #4070a0; } /* SpecialChar */
-code span.ss { color: #bb6688; } /* SpecialString */
-code span.st { color: #4070a0; } /* String */
-code span.va { color: #19177c; } /* Variable */
-code span.vs { color: #4070a0; } /* VerbatimString */
-code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
 </style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./composition.html" rel="next">
+<link href="./data.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
 
 
 </head>
 
-<body>
+<body class="nav-sidebar floating">
 
-
-
-  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
-
-    <div class="book-summary">
-      <nav role="navigation">
-
-<ul class="summary">
-<li><a href="./">The targets R Package Design Documents</a></li>
-
-<li class="divider"></li>
-<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Introduction</a>
-<ul>
-<li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#design-1"><i class="fa fa-check"></i><b>1.1</b> Design</a></li>
-</ul></li>
-<li class="chapter" data-level="2" data-path="data.html"><a href="data.html"><i class="fa fa-check"></i><b>2</b> Data and metadata management</a>
-<ul>
-<li class="chapter" data-level="2.1" data-path="data.html"><a href="data.html#file-system"><i class="fa fa-check"></i><b>2.1</b> File system</a></li>
-<li class="chapter" data-level="2.2" data-path="data.html"><a href="data.html#targets"><i class="fa fa-check"></i><b>2.2</b> Targets</a></li>
-<li class="chapter" data-level="2.3" data-path="data.html"><a href="data.html#process"><i class="fa fa-check"></i><b>2.3</b> Process</a></li>
-<li class="chapter" data-level="2.4" data-path="data.html"><a href="data.html#progress"><i class="fa fa-check"></i><b>2.4</b> Progress</a></li>
-<li class="chapter" data-level="2.5" data-path="data.html"><a href="data.html#metadata"><i class="fa fa-check"></i><b>2.5</b> Metadata</a></li>
-<li class="chapter" data-level="2.6" data-path="data.html"><a href="data.html#skipping-up-to-date-targets"><i class="fa fa-check"></i><b>2.6</b> Skipping up-to-date targets</a></li>
-<li class="chapter" data-level="2.7" data-path="data.html"><a href="data.html#databases"><i class="fa fa-check"></i><b>2.7</b> Databases</a></li>
-</ul></li>
-<li class="chapter" data-level="3" data-path="classes.html"><a href="classes.html"><i class="fa fa-check"></i><b>3</b> Major internal classes</a>
-<ul>
-<li class="chapter" data-level="3.1" data-path="classes.html"><a href="classes.html#algorithm-class"><i class="fa fa-check"></i><b>3.1</b> Algorithm class</a></li>
-<li class="chapter" data-level="3.2" data-path="classes.html"><a href="classes.html#pipeline-class"><i class="fa fa-check"></i><b>3.2</b> Pipeline class</a></li>
-<li class="chapter" data-level="3.3" data-path="classes.html"><a href="classes.html#scheduler-class"><i class="fa fa-check"></i><b>3.3</b> Scheduler class</a></li>
-<li class="chapter" data-level="3.4" data-path="classes.html"><a href="classes.html#graph-class"><i class="fa fa-check"></i><b>3.4</b> Graph class</a></li>
-<li class="chapter" data-level="3.5" data-path="classes.html"><a href="classes.html#progress-class"><i class="fa fa-check"></i><b>3.5</b> Progress class</a></li>
-<li class="chapter" data-level="3.6" data-path="classes.html"><a href="classes.html#queue-class"><i class="fa fa-check"></i><b>3.6</b> Queue class</a></li>
-<li class="chapter" data-level="3.7" data-path="classes.html"><a href="classes.html#counter-class"><i class="fa fa-check"></i><b>3.7</b> Counter class</a></li>
-<li class="chapter" data-level="3.8" data-path="classes.html"><a href="classes.html#target-class"><i class="fa fa-check"></i><b>3.8</b> Target class</a></li>
-<li class="chapter" data-level="3.9" data-path="classes.html"><a href="classes.html#stem-class"><i class="fa fa-check"></i><b>3.9</b> Stem class</a></li>
-<li class="chapter" data-level="3.10" data-path="classes.html"><a href="classes.html#bud-class"><i class="fa fa-check"></i><b>3.10</b> Bud class</a></li>
-<li class="chapter" data-level="3.11" data-path="classes.html"><a href="classes.html#pattern-class"><i class="fa fa-check"></i><b>3.11</b> Pattern class</a></li>
-<li class="chapter" data-level="3.12" data-path="classes.html"><a href="classes.html#branch-class"><i class="fa fa-check"></i><b>3.12</b> Branch class</a></li>
-<li class="chapter" data-level="3.13" data-path="classes.html"><a href="classes.html#builder-class"><i class="fa fa-check"></i><b>3.13</b> Builder class</a></li>
-<li class="chapter" data-level="3.14" data-path="classes.html"><a href="classes.html#junction-class"><i class="fa fa-check"></i><b>3.14</b> Junction class</a></li>
-</ul></li>
-<li class="chapter" data-level="4" data-path="composition.html"><a href="composition.html"><i class="fa fa-check"></i><b>4</b> The composition of target objects</a>
-<ul>
-<li class="chapter" data-level="4.1" data-path="composition.html"><a href="composition.html#overall-structure"><i class="fa fa-check"></i><b>4.1</b> Overall structure</a></li>
-<li class="chapter" data-level="4.2" data-path="composition.html"><a href="composition.html#classes-1"><i class="fa fa-check"></i><b>4.2</b> Classes</a>
-<ul>
-<li class="chapter" data-level="4.2.1" data-path="composition.html"><a href="composition.html#command-class"><i class="fa fa-check"></i><b>4.2.1</b> Command class</a></li>
-<li class="chapter" data-level="4.2.2" data-path="composition.html"><a href="composition.html#settings-class"><i class="fa fa-check"></i><b>4.2.2</b> Settings class</a></li>
-<li class="chapter" data-level="4.2.3" data-path="composition.html"><a href="composition.html#value-class"><i class="fa fa-check"></i><b>4.2.3</b> Value class</a></li>
-</ul></li>
-<li class="chapter" data-level="4.3" data-path="composition.html"><a href="composition.html#metrics-class"><i class="fa fa-check"></i><b>4.3</b> Metrics class</a>
-<ul>
-<li class="chapter" data-level="4.3.1" data-path="composition.html"><a href="composition.html#store-class"><i class="fa fa-check"></i><b>4.3.1</b> Store class</a></li>
-<li class="chapter" data-level="4.3.2" data-path="composition.html"><a href="composition.html#file-class"><i class="fa fa-check"></i><b>4.3.2</b> File class</a></li>
-<li class="chapter" data-level="4.3.3" data-path="composition.html"><a href="composition.html#subpipeline"><i class="fa fa-check"></i><b>4.3.3</b> Subpipeline</a></li>
-<li class="chapter" data-level="4.3.4" data-path="composition.html"><a href="composition.html#junction-class-1"><i class="fa fa-check"></i><b>4.3.4</b> Junction class</a></li>
-<li class="chapter" data-level="4.3.5" data-path="composition.html"><a href="composition.html#pedigree-class"><i class="fa fa-check"></i><b>4.3.5</b> Pedigree class</a></li>
-<li class="chapter" data-level="4.3.6" data-path="composition.html"><a href="composition.html#cue-class"><i class="fa fa-check"></i><b>4.3.6</b> Cue class</a></li>
-<li class="chapter" data-level="4.3.7" data-path="composition.html"><a href="composition.html#patternview-class"><i class="fa fa-check"></i><b>4.3.7</b> Patternview class</a></li>
-</ul></li>
-</ul></li>
-<li class="chapter" data-level="5" data-path="orchestration.html"><a href="orchestration.html"><i class="fa fa-check"></i><b>5</b> Orchestration</a>
-<ul>
-<li class="chapter" data-level="5.1" data-path="orchestration.html"><a href="orchestration.html#decrement-the-ranks-of-downstream-targets-in-the-priority-queue."><i class="fa fa-check"></i><b>5.1</b> Decrement the ranks of downstream targets in the priority queue.</a></li>
-<li class="chapter" data-level="5.2" data-path="orchestration.html"><a href="orchestration.html#insert-new-targets-dynamically."><i class="fa fa-check"></i><b>5.2</b> Insert new targets dynamically.</a>
-<ul>
-<li class="chapter" data-level="5.2.1" data-path="orchestration.html"><a href="orchestration.html#insert-buds"><i class="fa fa-check"></i><b>5.2.1</b> Insert buds</a></li>
-<li class="chapter" data-level="5.2.2" data-path="orchestration.html"><a href="orchestration.html#insert-branches"><i class="fa fa-check"></i><b>5.2.2</b> Insert branches</a></li>
-</ul></li>
-</ul></li>
-<li class="divider"></li>
-<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
-
-</ul>
-
-      </nav>
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./classes.html"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Major internal classes</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
     </div>
-
-    <div class="book-body">
-      <div class="body-inner">
-        <div class="book-header" role="navigation">
-          <h1>
-            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">The targets R Package Design Specification</a>
-          </h1>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">The {targets} R package design specification</a> 
+        <div class="sidebar-tools-main">
+    <a href="https://github.com/ropensci-books/targets-design/" title="Source Code" class="quarto-navigation-tool px-1" aria-label="Source Code"><i class="bi bi-github"></i></a>
+    <div class="dropdown">
+      <a href="" title="Share" id="quarto-navigation-tool-dropdown-0" class="quarto-navigation-tool dropdown-toggle px-1" data-bs-toggle="dropdown" aria-expanded="false" role="link" aria-label="Share"><i class="bi bi-share"></i></a>
+      <ul class="dropdown-menu" aria-labelledby="quarto-navigation-tool-dropdown-0">
+          <li>
+            <a class="dropdown-item sidebar-tools-main-item" href="https://twitter.com/intent/tweet?url=|url|">
+              <i class="bi bi-twitter pe-1"></i>
+            Twitter
+            </a>
+          </li>
+          <li>
+            <a class="dropdown-item sidebar-tools-main-item" href="https://www.facebook.com/sharer/sharer.php?u=|url|">
+              <i class="bi bi-facebook pe-1"></i>
+            Facebook
+            </a>
+          </li>
+          <li>
+            <a class="dropdown-item sidebar-tools-main-item" href="https://www.linkedin.com/sharing/share-offsite/?url=|url|">
+              <i class="bi bi-linkedin pe-1"></i>
+            LinkedIn
+            </a>
+          </li>
+      </ul>
+    </div>
+</div>
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
         </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">The targets R Package Design Specification</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./data.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Data and metadata management</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./classes.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Major internal classes</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./composition.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">The composition of target objects</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./orchestration.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Orchestration</span></span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#algorithm-class" id="toc-algorithm-class" class="nav-link active" data-scroll-target="#algorithm-class"><span class="header-section-number">3.1</span> Algorithm class</a></li>
+  <li><a href="#pipeline-class" id="toc-pipeline-class" class="nav-link" data-scroll-target="#pipeline-class"><span class="header-section-number">3.2</span> Pipeline class</a></li>
+  <li><a href="#scheduler-class" id="toc-scheduler-class" class="nav-link" data-scroll-target="#scheduler-class"><span class="header-section-number">3.3</span> Scheduler class</a></li>
+  <li><a href="#graph-class" id="toc-graph-class" class="nav-link" data-scroll-target="#graph-class"><span class="header-section-number">3.4</span> Graph class</a></li>
+  <li><a href="#progress-class" id="toc-progress-class" class="nav-link" data-scroll-target="#progress-class"><span class="header-section-number">3.5</span> Progress class</a></li>
+  <li><a href="#queue-class" id="toc-queue-class" class="nav-link" data-scroll-target="#queue-class"><span class="header-section-number">3.6</span> Queue class</a></li>
+  <li><a href="#counter-class" id="toc-counter-class" class="nav-link" data-scroll-target="#counter-class"><span class="header-section-number">3.7</span> Counter class</a></li>
+  <li><a href="#target-class" id="toc-target-class" class="nav-link" data-scroll-target="#target-class"><span class="header-section-number">3.8</span> Target class</a></li>
+  <li><a href="#stem-class" id="toc-stem-class" class="nav-link" data-scroll-target="#stem-class"><span class="header-section-number">3.9</span> Stem class</a></li>
+  <li><a href="#bud-class" id="toc-bud-class" class="nav-link" data-scroll-target="#bud-class"><span class="header-section-number">3.10</span> Bud class</a></li>
+  <li><a href="#pattern-class" id="toc-pattern-class" class="nav-link" data-scroll-target="#pattern-class"><span class="header-section-number">3.11</span> Pattern class</a></li>
+  <li><a href="#branch-class" id="toc-branch-class" class="nav-link" data-scroll-target="#branch-class"><span class="header-section-number">3.12</span> Branch class</a></li>
+  <li><a href="#builder-class" id="toc-builder-class" class="nav-link" data-scroll-target="#builder-class"><span class="header-section-number">3.13</span> Builder class</a></li>
+  <li><a href="#junction-class" id="toc-junction-class" class="nav-link" data-scroll-target="#junction-class"><span class="header-section-number">3.14</span> Junction class</a></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/ropensci-books/targets-design/edit/main/classes.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
 
-        <div class="page-wrapper" tabindex="-1" role="main">
-          <div class="page-inner">
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title"><span id="classes" class="quarto-section-identifier"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Major internal classes</span></span></h1>
+</div>
 
-            <section class="normal" id="section-">
-<div id="classes" class="section level1 hasAnchor" number="3">
-<h1><span class="header-section-number">Chapter 3</span> Major internal classes<a href="classes.html#classes" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
 <p><code>targets</code> relies heavily on object-oriented programming, and the following subsections describe the major classes of objects relevant to orchestration and branching. Objects that appear once per workflow are instances of <code>R6</code> classes. To maximize performance, target-specific data structures are lower-tech classes: simple environments with formal constructors, helpers, and validators.</p>
-<div id="algorithm-class" class="section level2 hasAnchor" number="3.1">
-<h2><span class="header-section-number">3.1</span> Algorithm class<a href="classes.html#algorithm-class" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<section id="algorithm-class" class="level2" data-number="3.1">
+<h2 data-number="3.1" class="anchored" data-anchor-id="algorithm-class"><span class="header-section-number">3.1</span> Algorithm class</h2>
 <p>An algorithm in <code>targets</code> is an abstract class that represents how to iterate through the pipeline target by target. Different algorithms describe different kinds of deployment: for example, execution in the main process on the host machine versus parallel execution on a cluster. Every algorithm has a scheduler object and a pipeline object.</p>
-</div>
-<div id="pipeline-class" class="section level2 hasAnchor" number="3.2">
-<h2><span class="header-section-number">3.2</span> Pipeline class<a href="classes.html#pipeline-class" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+</section>
+<section id="pipeline-class" class="level2" data-number="3.2">
+<h2 data-number="3.2" class="anchored" data-anchor-id="pipeline-class"><span class="header-section-number">3.2</span> Pipeline class</h2>
 <p>A pipeline is a wrapper around a collection of targets, and it is responsible for the initial reasoning about the topology of the pipeline before runtime. Pipelines express their reasoning by producing static graphs and scheduler objects early on. In addition, pipelines contain new buds and branches created dynamically during the pipeline.</p>
-</div>
-<div id="scheduler-class" class="section level2 hasAnchor" number="3.3">
-<h2><span class="header-section-number">3.3</span> Scheduler class<a href="classes.html#scheduler-class" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+</section>
+<section id="scheduler-class" class="level2" data-number="3.3">
+<h2 data-number="3.3" class="anchored" data-anchor-id="scheduler-class"><span class="header-section-number">3.3</span> Scheduler class</h2>
 <p>Whereas pipelines are responsible for <em>static</em> topology, schedulers are responsible for <em>dynamic</em> topology. Schedulers know</p>
-<ol style="list-style-type: decimal">
+<ol type="1">
 <li>The upstream and downstream neighbors of each target.</li>
-<li>The progress of each target, e.g. queued, running, or finished.</li>
+<li>The progress of each target, e.g.&nbsp;queued, running, or finished.</li>
 <li>How many upstream dependencies need to be checked or built before a target is ready to run.</li>
 </ol>
 <p>To meet these responsibilities, the scheduler is composed of three smaller objects:</p>
-<ol style="list-style-type: decimal">
+<ol type="1">
 <li>A graph object.</li>
 <li>A progress object.</li>
 <li>A priority queue.</li>
 </ol>
-</div>
-<div id="graph-class" class="section level2 hasAnchor" number="3.4">
-<h2><span class="header-section-number">3.4</span> Graph class<a href="classes.html#graph-class" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+</section>
+<section id="graph-class" class="level2" data-number="3.4">
+<h2 data-number="3.4" class="anchored" data-anchor-id="graph-class"><span class="header-section-number">3.4</span> Graph class</h2>
 <p>The graph class keeps track of the upstream and downstream neighbors of each target. The scheduler adds edges to the graph when new targets are created dynamically.</p>
 <p>The graph is implemented as two adjacency lists: one for upstream edges and another for downstream edges. For the purposes of powering a pipeline, we find this low-tech structure to be more efficient than <code>igraph</code> in our situation where we repeatedly query the graph and the number of nodes is small. (Transient <code>igraph</code> objects, however, are created for validation and visualization purposes.)</p>
-</div>
-<div id="progress-class" class="section level2 hasAnchor" number="3.5">
-<h2><span class="header-section-number">3.5</span> Progress class<a href="classes.html#progress-class" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+</section>
+<section id="progress-class" class="level2" data-number="3.5">
+<h2 data-number="3.5" class="anchored" data-anchor-id="progress-class"><span class="header-section-number">3.5</span> Progress class</h2>
 <p>The progress class keeps track of the state of each target: queued, running, skipped, built, outdated, canceled, or errored. To accomplish this, the progress object maintains a counter object for each category.</p>
-</div>
-<div id="queue-class" class="section level2 hasAnchor" number="3.6">
-<h2><span class="header-section-number">3.6</span> Queue class<a href="classes.html#queue-class" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+</section>
+<section id="queue-class" class="level2" data-number="3.6">
+<h2 data-number="3.6" class="anchored" data-anchor-id="queue-class"><span class="header-section-number">3.6</span> Queue class</h2>
 <p>The queue class is a priority queue, essentially a wrapper around a named integer vector of ranks. For <code>targets</code>’ purposes, the rank of a target is the number of unmet dependencies so far, minus a per-target priority value in the interval <code>[0, 1)</code> to control the order in which targets are dequeued. As the pipeline progresses, the queue is checked and modified periodically as dependencies are met. The next target to build is the lowest rank target such that <code>-1L &lt; rank &lt;= 0L</code>. Branches are pushed to the queue when they are dynamically created.</p>
-</div>
-<div id="counter-class" class="section level2 hasAnchor" number="3.7">
-<h2><span class="header-section-number">3.7</span> Counter class<a href="classes.html#counter-class" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>A counter is an efficient abstraction for keeping track of target membership in a category. A counter stores the number of targets in the category and a hash table with the names of those targets. Counters are used to efficiently keep track of runtime progress (e.g. running, queued, or built) as well membership in the queue.</p>
-</div>
-<div id="target-class" class="section level2 hasAnchor" number="3.8">
-<h2><span class="header-section-number">3.8</span> Target class<a href="classes.html#target-class" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+</section>
+<section id="counter-class" class="level2" data-number="3.7">
+<h2 data-number="3.7" class="anchored" data-anchor-id="counter-class"><span class="header-section-number">3.7</span> Counter class</h2>
+<p>A counter is an efficient abstraction for keeping track of target membership in a category. A counter stores the number of targets in the category and a hash table with the names of those targets. Counters are used to efficiently keep track of runtime progress (e.g.&nbsp;running, queued, or built) as well membership in the queue.</p>
+</section>
+<section id="target-class" class="level2" data-number="3.8">
+<h2 data-number="3.8" class="anchored" data-anchor-id="target-class"><span class="header-section-number">3.8</span> Target class</h2>
 <p>A target is an abstract class for a step of a pipeline. Each target is a composite of intricate sub-classes that keep track of commands, in-memory dependencies, storage, settings, and some aspects of build behavior. As its name implies, the <code>targets</code> package pushes most of its conceptual complexity to the target level in order to decentralize the architecture and make it much easier to reason about the pipeline as a whole.</p>
 <p>There are multiple sub-classes of targets, and the different behaviors of different sub-classes drive the orchestration and branching of targets. The inheritance hierarchy is as follows.</p>
 <ul>
@@ -283,86 +268,483 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li>Pattern</li>
 </ul></li>
 </ul>
-</div>
-<div id="stem-class" class="section level2 hasAnchor" number="3.9">
-<h2><span class="header-section-number">3.9</span> Stem class<a href="classes.html#stem-class" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+</section>
+<section id="stem-class" class="level2" data-number="3.9">
+<h2 data-number="3.9" class="anchored" data-anchor-id="stem-class"><span class="header-section-number">3.9</span> Stem class</h2>
 <p>A stem is the most basic form of target. It is neither a pattern nor part of a pattern. However, it can dynamically create buds to assist with branching.</p>
-</div>
-<div id="bud-class" class="section level2 hasAnchor" number="3.10">
-<h2><span class="header-section-number">3.10</span> Bud class<a href="classes.html#bud-class" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+</section>
+<section id="bud-class" class="level2" data-number="3.10">
+<h2 data-number="3.10" class="anchored" data-anchor-id="bud-class"><span class="header-section-number">3.10</span> Bud class</h2>
 <p>A bud is a target that simply contains part of a stem’s value in memory. The purpose of a bud is to serve as a dependency of a branch when a pattern branches over a stem.</p>
-</div>
-<div id="pattern-class" class="section level2 hasAnchor" number="3.11">
-<h2><span class="header-section-number">3.11</span> Pattern class<a href="classes.html#pattern-class" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+</section>
+<section id="pattern-class" class="level2" data-number="3.11">
+<h2 data-number="3.11" class="anchored" data-anchor-id="pattern-class"><span class="header-section-number">3.11</span> Pattern class</h2>
 <p>A pattern is an abstract class responsible for creating new branches and dynamically updating the scheduler. Stems and patterns are the only targets the user manually defines in the pipeline.</p>
-</div>
-<div id="branch-class" class="section level2 hasAnchor" number="3.12">
-<h2><span class="header-section-number">3.12</span> Branch class<a href="classes.html#branch-class" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+</section>
+<section id="branch-class" class="level2" data-number="3.12">
+<h2 data-number="3.12" class="anchored" data-anchor-id="branch-class"><span class="header-section-number">3.12</span> Branch class</h2>
 <p>A branch is a target that a pattern creates dynamically at runtime.</p>
-</div>
-<div id="builder-class" class="section level2 hasAnchor" number="3.13">
-<h2><span class="header-section-number">3.13</span> Builder class<a href="classes.html#builder-class" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+</section>
+<section id="builder-class" class="level2" data-number="3.13">
+<h2 data-number="3.13" class="anchored" data-anchor-id="builder-class"><span class="header-section-number">3.13</span> Builder class</h2>
 <p>Stems and branches have a lot in common: they actually run R commands, and the write the return values to storage. A builder is an abstract class to contain the heavy lifting that stems and branches both do.</p>
-</div>
-<div id="junction-class" class="section level2 hasAnchor" number="3.14">
-<h2><span class="header-section-number">3.14</span> Junction class<a href="classes.html#junction-class" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>A junction is a manifest of the buds or branches (children) that a stem or pattern dynamically creates, and it depends on the user-specified <code>pattern</code> argument to <code>tar_target()</code>, e.g. <code>tar_target(..., pattern = cross(x, map(y, z)))</code>.</p>
+</section>
+<section id="junction-class" class="level2" data-number="3.14">
+<h2 data-number="3.14" class="anchored" data-anchor-id="junction-class"><span class="header-section-number">3.14</span> Junction class</h2>
+<p>A junction is a manifest of the buds or branches (children) that a stem or pattern dynamically creates, and it depends on the user-specified <code>pattern</code> argument to <code>tar_target()</code>, e.g.&nbsp;<code>tar_target(..., pattern = cross(x, map(y, z)))</code>.</p>
 
-</div>
-</div>
-<div style = "background: #1C356D; color: white; padding: 10px 10px 10px 25px; font-size: 1em; width: 100%;">
-  Copyright Eli Lilly and Company
-</div>
-            </section>
 
-          </div>
-        </div>
-      </div>
-<a href="data.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="composition.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
-    </div>
-  </div>
-<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
-<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
-<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
-<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
-<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
-<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
-<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
-<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
-<script>
-gitbook.require(["gitbook"], function(gitbook) {
-gitbook.start({
-"sharing": null,
-"fontsettings": {
-"theme": "white",
-"family": "sans",
-"size": 2
-},
-"edit": {
-"link": "https://github.com/ropensci/targets-design/edit/main/classes.Rmd",
-"text": "Edit this chapter"
-},
-"history": {
-"link": "https://github.com/ropensci/targets-design/commits/main/classes.Rmd",
-"text": "Chapter edit history"
-},
-"view": {
-"link": null,
-"text": null
-},
-"download": null,
-"search": {
-"engine": "fuse",
-"options": null
-},
-"toc": {
-"collapse": "subsection"
-}
-});
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp("https:\/\/books\.ropensci\.org\/targets-design\/");
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
 });
 </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./data.html" class="pagination-link" aria-label="Data and metadata management">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Data and metadata management</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./composition.html" class="pagination-link" aria-label="The composition of target objects">
+        <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">The composition of target objects</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+      &nbsp;
+    </div>   
+    <div class="nav-footer-center">
+<p>How to get help: <a href="https://books.ropensci.org/targets/help.html" class="uri">https://books.ropensci.org/targets/help.html</a><br>Copyright 2024, Eli Lilly and Company</p>
+<div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/ropensci-books/targets-design/edit/main/classes.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li></ul></div></div>
+    <div class="nav-footer-right">
+      &nbsp;
+    </div>
+  </div>
+</footer>
 
-</body>
 
-</html>
+
+
+</body></html>

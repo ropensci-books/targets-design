@@ -1,240 +1,218 @@
 <!DOCTYPE html>
-<html lang="" xml:lang="">
-<head>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
-  <meta charset="utf-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Chapter 2 Data and metadata management | The targets R Package Design Specification</title>
-  <meta name="description" content="Chapter 2 Data and metadata management | The targets R Package Design Specification" />
-  <meta name="generator" content="bookdown 0.27 and GitBook 2.6.7" />
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.5.57">
 
-  <meta property="og:title" content="Chapter 2 Data and metadata management | The targets R Package Design Specification" />
-  <meta property="og:type" content="book" />
-  <meta property="og:image" content="https://books.ropensci.org/targets-design/man/figures/logo.png" />
-  
-  <meta name="github-repo" content="ropensci-books/targets-design" />
-
-  <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Chapter 2 Data and metadata management | The targets R Package Design Specification" />
-  
-  
-  <meta name="twitter:image" content="https://books.ropensci.org/targets-design/man/figures/logo.png" />
-
-<meta name="author" content="Will Landau" />
-<meta name="author" content="Copyright Eli Lilly and Company" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
-  <link rel="apple-touch-icon-precomposed" sizes="120x120" href="man/figures/apple-touch-icon.png" />
-  <link rel="shortcut icon" href="man/figures/favicon.ico" type="image/x-icon" />
-<link rel="prev" href="index.html"/>
-<link rel="next" href="classes.html"/>
-<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
-<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
-<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
-<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
-<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
-<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
-<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
-<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
-
-
-
-
-
-
-
-
-<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
-<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
-<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
-<!-- Global site tag (gtag.js) - Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=UA-150843595-1"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'UA-150843595-1');
-</script>
-
-
-<style type="text/css">
-pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
-pre > code.sourceCode > span:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
-pre.sourceCode { margin: 0; }
-@media screen {
-div.sourceCode { overflow: auto; }
+<title>2&nbsp; Data and metadata management – The {targets} R package design specification</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
 }
-@media print {
-pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
-}
-pre.numberSource code
-  { counter-reset: source-line 0; }
-pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
-pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-    color: #aaaaaa;
-  }
-pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
-div.sourceCode
-  {   }
-@media screen {
-pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
-}
-code span.al { color: #ff0000; font-weight: bold; } /* Alert */
-code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
-code span.at { color: #7d9029; } /* Attribute */
-code span.bn { color: #40a070; } /* BaseN */
-code span.bu { } /* BuiltIn */
-code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
-code span.ch { color: #4070a0; } /* Char */
-code span.cn { color: #880000; } /* Constant */
-code span.co { color: #60a0b0; font-style: italic; } /* Comment */
-code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
-code span.do { color: #ba2121; font-style: italic; } /* Documentation */
-code span.dt { color: #902000; } /* DataType */
-code span.dv { color: #40a070; } /* DecVal */
-code span.er { color: #ff0000; font-weight: bold; } /* Error */
-code span.ex { } /* Extension */
-code span.fl { color: #40a070; } /* Float */
-code span.fu { color: #06287e; } /* Function */
-code span.im { } /* Import */
-code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
-code span.kw { color: #007020; font-weight: bold; } /* Keyword */
-code span.op { color: #666666; } /* Operator */
-code span.ot { color: #007020; } /* Other */
-code span.pp { color: #bc7a00; } /* Preprocessor */
-code span.sc { color: #4070a0; } /* SpecialChar */
-code span.ss { color: #bb6688; } /* SpecialString */
-code span.st { color: #4070a0; } /* String */
-code span.va { color: #19177c; } /* Variable */
-code span.vs { color: #4070a0; } /* VerbatimString */
-code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
 </style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./classes.html" rel="next">
+<link href="./index.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
 
 
 </head>
 
-<body>
+<body class="nav-sidebar floating">
 
-
-
-  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
-
-    <div class="book-summary">
-      <nav role="navigation">
-
-<ul class="summary">
-<li><a href="./">The targets R Package Design Documents</a></li>
-
-<li class="divider"></li>
-<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Introduction</a>
-<ul>
-<li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#design-1"><i class="fa fa-check"></i><b>1.1</b> Design</a></li>
-</ul></li>
-<li class="chapter" data-level="2" data-path="data.html"><a href="data.html"><i class="fa fa-check"></i><b>2</b> Data and metadata management</a>
-<ul>
-<li class="chapter" data-level="2.1" data-path="data.html"><a href="data.html#file-system"><i class="fa fa-check"></i><b>2.1</b> File system</a></li>
-<li class="chapter" data-level="2.2" data-path="data.html"><a href="data.html#targets"><i class="fa fa-check"></i><b>2.2</b> Targets</a></li>
-<li class="chapter" data-level="2.3" data-path="data.html"><a href="data.html#process"><i class="fa fa-check"></i><b>2.3</b> Process</a></li>
-<li class="chapter" data-level="2.4" data-path="data.html"><a href="data.html#progress"><i class="fa fa-check"></i><b>2.4</b> Progress</a></li>
-<li class="chapter" data-level="2.5" data-path="data.html"><a href="data.html#metadata"><i class="fa fa-check"></i><b>2.5</b> Metadata</a></li>
-<li class="chapter" data-level="2.6" data-path="data.html"><a href="data.html#skipping-up-to-date-targets"><i class="fa fa-check"></i><b>2.6</b> Skipping up-to-date targets</a></li>
-<li class="chapter" data-level="2.7" data-path="data.html"><a href="data.html#databases"><i class="fa fa-check"></i><b>2.7</b> Databases</a></li>
-</ul></li>
-<li class="chapter" data-level="3" data-path="classes.html"><a href="classes.html"><i class="fa fa-check"></i><b>3</b> Major internal classes</a>
-<ul>
-<li class="chapter" data-level="3.1" data-path="classes.html"><a href="classes.html#algorithm-class"><i class="fa fa-check"></i><b>3.1</b> Algorithm class</a></li>
-<li class="chapter" data-level="3.2" data-path="classes.html"><a href="classes.html#pipeline-class"><i class="fa fa-check"></i><b>3.2</b> Pipeline class</a></li>
-<li class="chapter" data-level="3.3" data-path="classes.html"><a href="classes.html#scheduler-class"><i class="fa fa-check"></i><b>3.3</b> Scheduler class</a></li>
-<li class="chapter" data-level="3.4" data-path="classes.html"><a href="classes.html#graph-class"><i class="fa fa-check"></i><b>3.4</b> Graph class</a></li>
-<li class="chapter" data-level="3.5" data-path="classes.html"><a href="classes.html#progress-class"><i class="fa fa-check"></i><b>3.5</b> Progress class</a></li>
-<li class="chapter" data-level="3.6" data-path="classes.html"><a href="classes.html#queue-class"><i class="fa fa-check"></i><b>3.6</b> Queue class</a></li>
-<li class="chapter" data-level="3.7" data-path="classes.html"><a href="classes.html#counter-class"><i class="fa fa-check"></i><b>3.7</b> Counter class</a></li>
-<li class="chapter" data-level="3.8" data-path="classes.html"><a href="classes.html#target-class"><i class="fa fa-check"></i><b>3.8</b> Target class</a></li>
-<li class="chapter" data-level="3.9" data-path="classes.html"><a href="classes.html#stem-class"><i class="fa fa-check"></i><b>3.9</b> Stem class</a></li>
-<li class="chapter" data-level="3.10" data-path="classes.html"><a href="classes.html#bud-class"><i class="fa fa-check"></i><b>3.10</b> Bud class</a></li>
-<li class="chapter" data-level="3.11" data-path="classes.html"><a href="classes.html#pattern-class"><i class="fa fa-check"></i><b>3.11</b> Pattern class</a></li>
-<li class="chapter" data-level="3.12" data-path="classes.html"><a href="classes.html#branch-class"><i class="fa fa-check"></i><b>3.12</b> Branch class</a></li>
-<li class="chapter" data-level="3.13" data-path="classes.html"><a href="classes.html#builder-class"><i class="fa fa-check"></i><b>3.13</b> Builder class</a></li>
-<li class="chapter" data-level="3.14" data-path="classes.html"><a href="classes.html#junction-class"><i class="fa fa-check"></i><b>3.14</b> Junction class</a></li>
-</ul></li>
-<li class="chapter" data-level="4" data-path="composition.html"><a href="composition.html"><i class="fa fa-check"></i><b>4</b> The composition of target objects</a>
-<ul>
-<li class="chapter" data-level="4.1" data-path="composition.html"><a href="composition.html#overall-structure"><i class="fa fa-check"></i><b>4.1</b> Overall structure</a></li>
-<li class="chapter" data-level="4.2" data-path="composition.html"><a href="composition.html#classes-1"><i class="fa fa-check"></i><b>4.2</b> Classes</a>
-<ul>
-<li class="chapter" data-level="4.2.1" data-path="composition.html"><a href="composition.html#command-class"><i class="fa fa-check"></i><b>4.2.1</b> Command class</a></li>
-<li class="chapter" data-level="4.2.2" data-path="composition.html"><a href="composition.html#settings-class"><i class="fa fa-check"></i><b>4.2.2</b> Settings class</a></li>
-<li class="chapter" data-level="4.2.3" data-path="composition.html"><a href="composition.html#value-class"><i class="fa fa-check"></i><b>4.2.3</b> Value class</a></li>
-</ul></li>
-<li class="chapter" data-level="4.3" data-path="composition.html"><a href="composition.html#metrics-class"><i class="fa fa-check"></i><b>4.3</b> Metrics class</a>
-<ul>
-<li class="chapter" data-level="4.3.1" data-path="composition.html"><a href="composition.html#store-class"><i class="fa fa-check"></i><b>4.3.1</b> Store class</a></li>
-<li class="chapter" data-level="4.3.2" data-path="composition.html"><a href="composition.html#file-class"><i class="fa fa-check"></i><b>4.3.2</b> File class</a></li>
-<li class="chapter" data-level="4.3.3" data-path="composition.html"><a href="composition.html#subpipeline"><i class="fa fa-check"></i><b>4.3.3</b> Subpipeline</a></li>
-<li class="chapter" data-level="4.3.4" data-path="composition.html"><a href="composition.html#junction-class-1"><i class="fa fa-check"></i><b>4.3.4</b> Junction class</a></li>
-<li class="chapter" data-level="4.3.5" data-path="composition.html"><a href="composition.html#pedigree-class"><i class="fa fa-check"></i><b>4.3.5</b> Pedigree class</a></li>
-<li class="chapter" data-level="4.3.6" data-path="composition.html"><a href="composition.html#cue-class"><i class="fa fa-check"></i><b>4.3.6</b> Cue class</a></li>
-<li class="chapter" data-level="4.3.7" data-path="composition.html"><a href="composition.html#patternview-class"><i class="fa fa-check"></i><b>4.3.7</b> Patternview class</a></li>
-</ul></li>
-</ul></li>
-<li class="chapter" data-level="5" data-path="orchestration.html"><a href="orchestration.html"><i class="fa fa-check"></i><b>5</b> Orchestration</a>
-<ul>
-<li class="chapter" data-level="5.1" data-path="orchestration.html"><a href="orchestration.html#decrement-the-ranks-of-downstream-targets-in-the-priority-queue."><i class="fa fa-check"></i><b>5.1</b> Decrement the ranks of downstream targets in the priority queue.</a></li>
-<li class="chapter" data-level="5.2" data-path="orchestration.html"><a href="orchestration.html#insert-new-targets-dynamically."><i class="fa fa-check"></i><b>5.2</b> Insert new targets dynamically.</a>
-<ul>
-<li class="chapter" data-level="5.2.1" data-path="orchestration.html"><a href="orchestration.html#insert-buds"><i class="fa fa-check"></i><b>5.2.1</b> Insert buds</a></li>
-<li class="chapter" data-level="5.2.2" data-path="orchestration.html"><a href="orchestration.html#insert-branches"><i class="fa fa-check"></i><b>5.2.2</b> Insert branches</a></li>
-</ul></li>
-</ul></li>
-<li class="divider"></li>
-<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
-
-</ul>
-
-      </nav>
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./data.html"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Data and metadata management</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
     </div>
-
-    <div class="book-body">
-      <div class="body-inner">
-        <div class="book-header" role="navigation">
-          <h1>
-            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">The targets R Package Design Specification</a>
-          </h1>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">The {targets} R package design specification</a> 
+        <div class="sidebar-tools-main">
+    <a href="https://github.com/ropensci-books/targets-design/" title="Source Code" class="quarto-navigation-tool px-1" aria-label="Source Code"><i class="bi bi-github"></i></a>
+    <div class="dropdown">
+      <a href="" title="Share" id="quarto-navigation-tool-dropdown-0" class="quarto-navigation-tool dropdown-toggle px-1" data-bs-toggle="dropdown" aria-expanded="false" role="link" aria-label="Share"><i class="bi bi-share"></i></a>
+      <ul class="dropdown-menu" aria-labelledby="quarto-navigation-tool-dropdown-0">
+          <li>
+            <a class="dropdown-item sidebar-tools-main-item" href="https://twitter.com/intent/tweet?url=|url|">
+              <i class="bi bi-twitter pe-1"></i>
+            Twitter
+            </a>
+          </li>
+          <li>
+            <a class="dropdown-item sidebar-tools-main-item" href="https://www.facebook.com/sharer/sharer.php?u=|url|">
+              <i class="bi bi-facebook pe-1"></i>
+            Facebook
+            </a>
+          </li>
+          <li>
+            <a class="dropdown-item sidebar-tools-main-item" href="https://www.linkedin.com/sharing/share-offsite/?url=|url|">
+              <i class="bi bi-linkedin pe-1"></i>
+            LinkedIn
+            </a>
+          </li>
+      </ul>
+    </div>
+</div>
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
         </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">The targets R Package Design Specification</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./data.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Data and metadata management</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./classes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Major internal classes</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./composition.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">The composition of target objects</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./orchestration.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Orchestration</span></span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#file-system" id="toc-file-system" class="nav-link active" data-scroll-target="#file-system"><span class="header-section-number">2.1</span> File system</a></li>
+  <li><a href="#targets" id="toc-targets" class="nav-link" data-scroll-target="#targets"><span class="header-section-number">2.2</span> Targets</a></li>
+  <li><a href="#process" id="toc-process" class="nav-link" data-scroll-target="#process"><span class="header-section-number">2.3</span> Process</a></li>
+  <li><a href="#progress" id="toc-progress" class="nav-link" data-scroll-target="#progress"><span class="header-section-number">2.4</span> Progress</a></li>
+  <li><a href="#metadata" id="toc-metadata" class="nav-link" data-scroll-target="#metadata"><span class="header-section-number">2.5</span> Metadata</a></li>
+  <li><a href="#skipping-up-to-date-targets" id="toc-skipping-up-to-date-targets" class="nav-link" data-scroll-target="#skipping-up-to-date-targets"><span class="header-section-number">2.6</span> Skipping up-to-date targets</a></li>
+  <li><a href="#databases" id="toc-databases" class="nav-link" data-scroll-target="#databases"><span class="header-section-number">2.7</span> Databases</a></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/ropensci-books/targets-design/edit/main/data.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
 
-        <div class="page-wrapper" tabindex="-1" role="main">
-          <div class="page-inner">
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title"><span id="data" class="quarto-section-identifier"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Data and metadata management</span></span></h1>
+</div>
 
-            <section class="normal" id="section-">
-<div id="data" class="section level1 hasAnchor" number="2">
-<h1><span class="header-section-number">Chapter 2</span> Data and metadata management<a href="data.html#data" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
 <p>Like its predecessor, <code>drake</code>, the <code>targets</code> package</p>
-<ol style="list-style-type: decimal">
+<ol type="1">
 <li>Abstracts files as R objects.</li>
 <li>Records the real-time progress of targets as they are running.</li>
 <li>Records special metadata in order to skip targets that are already up to date.</li>
 </ol>
 <p>Unlike <code>drake</code>, which outsources data and metadata management to an external package, <code>targets</code> has an entirely custom internal data system. <code>targets</code> goes out of its way to reduce the number of files in storage, centralize the progress data and metadata, assign informative file names, and expose the file system to the user. This approach increases efficiency and portability, and it helps users understand and take control of their data.</p>
-<div id="file-system" class="section level2 hasAnchor" number="2.1">
-<h2><span class="header-section-number">2.1</span> File system<a href="data.html#file-system" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<section id="file-system" class="level2" data-number="2.1">
+<h2 data-number="2.1" class="anchored" data-anchor-id="file-system"><span class="header-section-number">2.1</span> File system</h2>
 <p>When a <code>targets</code> pipeline runs, it creates a folder called <code>_targets</code> to store all the files it needs. In <code>targets</code> version 0.3.1.9000 and above, users can set the data store path to something other than <code>_targets</code> (see <a href="https://docs.ropensci.org/targets/reference/tar_config_set.html"><code>tar_config_set()</code></a>).</p>
 <pre><code>_targets/ # Configurable with tar_config_set().
 ├── meta/
@@ -250,22 +228,23 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ├── scratch/ # tar_make() deletes this folder after it finishes.
 └── user/ # gittargets users can put custom files here for data version control.</code></pre>
 <p>The number of files equals the number of targets plus two, which makes projects easier to upload and share among collaborators than <code>drake</code>’s <code>.drake/</code> cache. (Files in <code>_targets/scratch/</code> do not count because they can all be safely deleted after <code>tar_make()</code>.) However, these files may still be too large and too numerous for code-specific version control systems like Git. For such projects, it may be more appropriate to share caches through external version-aware platforms such as Dropbox, Microsoft OneDrive, and Google Docs.</p>
-</div>
-<div id="targets" class="section level2 hasAnchor" number="2.2">
-<h2><span class="header-section-number">2.2</span> Targets<a href="data.html#targets" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>The exception to this data structure is content-addressable storage as explained in the documentation of <code>targets::tar_repository_cas()</code>.</p>
+</section>
+<section id="targets" class="level2" data-number="2.2">
+<h2 data-number="2.2" class="anchored" data-anchor-id="targets"><span class="header-section-number">2.2</span> Targets</h2>
 <p>With the exception of dynamic files, the return value of each target lives in its own file inside <code>_targets/objects/</code>. The file name is the name of the target, and there is no file extension. The metadata keeps track of the storage format that governs how to read and write the target’s data. The default format is RDS, so if target <code>x</code> has no explicit format, then <code>readRDS("_targets/objects/x")</code> will read the data. (However, we state this just for the sake of understanding. The recommended way to read data is <code>tar_read()</code>, which takes the storage format into account.)</p>
-</div>
-<div id="process" class="section level2 hasAnchor" number="2.3">
-<h2><span class="header-section-number">2.3</span> Process<a href="data.html#process" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+</section>
+<section id="process" class="level2" data-number="2.3">
+<h2 data-number="2.3" class="anchored" data-anchor-id="process"><span class="header-section-number">2.3</span> Process</h2>
 <p>The file <code>_targets/meta/process</code> is a pipe-separated flat file recording high-level information about the external <code>callr</code> process that orchestrates the targets. In that text file is the process ID, which can be used to check if <code>tar_make()</code> is still running in certain situations. Notably, it helps Shiny developers make apps that allow the user to log out and then resume the session after logging back in.</p>
-</div>
-<div id="progress" class="section level2 hasAnchor" number="2.4">
-<h2><span class="header-section-number">2.4</span> Progress<a href="data.html#progress" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+</section>
+<section id="progress" class="level2" data-number="2.4">
+<h2 data-number="2.4" class="anchored" data-anchor-id="progress"><span class="header-section-number">2.4</span> Progress</h2>
 <p>The file <code>_targets/meta/progress</code> is a pipe-separated flat file with the name of each target and it’s current runtime progress (running, built, canceled, or errored). The information in this file helps users keep track of what the pipeline is doing at a given moment. <code>targets</code> periodically appends rows to <code>_targets/meta/progress</code> as the pipeline progresses, so duplicated names usually appear. For any target with duplicated rows in <code>_targets/meta/progress</code>, only the lowest row is valid.</p>
 <p>In most situations, the progress file can be safely excluded from version control. Functions like <code>tar_graph()</code> use progress information, but it is not essential to the reproducible end product.</p>
-</div>
-<div id="metadata" class="section level2 hasAnchor" number="2.5">
-<h2><span class="header-section-number">2.5</span> Metadata<a href="data.html#metadata" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+</section>
+<section id="metadata" class="level2" data-number="2.5">
+<h2 data-number="2.5" class="anchored" data-anchor-id="metadata"><span class="header-section-number">2.5</span> Metadata</h2>
 <p><code>targets</code> uses special metadata to decide which targets are up to date and which need to run. The metadata file <code>_targets/meta/meta</code> is a flat file with one row for every target and every global object relevant to the pipeline. <code>targets</code> appends new rows to this file as the pipeline progresses. Unlike <code>drake</code>, the metadata is centralized and compatible with <code>data.table</code>, which makes it far faster to check which targets are up to date. In addition, the metadata system allows <code>targets</code> to check not only for up-to-date targets, but also up-to-date global objects, which makes it easier for the user to understand <em>why</em> a target is outdated.</p>
 <p><code>_targets/meta/meta</code> has the following columns. Global objects use only the <code>name</code>, <code>type</code>, and <code>data</code> fields.</p>
 <ul>
@@ -288,11 +267,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><code>error</code>: Error message thrown when the target ran.</li>
 </ul>
 <p>These fields are pipe-separated in the flat file. Fields <code>path</code> and <code>children</code> can have multiple character strings, and these character strings are separated by asterisks in storage. (In memory, <code>path</code> and <code>children</code> are list columns.)</p>
-</div>
-<div id="skipping-up-to-date-targets" class="section level2 hasAnchor" number="2.6">
-<h2><span class="header-section-number">2.6</span> Skipping up-to-date targets<a href="data.html#skipping-up-to-date-targets" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+</section>
+<section id="skipping-up-to-date-targets" class="level2" data-number="2.6">
+<h2 data-number="2.6" class="anchored" data-anchor-id="skipping-up-to-date-targets"><span class="header-section-number">2.6</span> Skipping up-to-date targets</h2>
 <p><code>targets</code> uses the metadata to decide if a target is up to date. The <code>should_run()</code> method of the <code>builder</code> class manages this. A target is outdated if one of the following conditions is met. <code>targets</code> checks these rules in the order given below. There is a special <code>cue</code> class to allow the user to customize / suppress most of these rules.</p>
-<ol style="list-style-type: decimal">
+<ol type="1">
 <li>There is no metadata record of the target.</li>
 <li>The target errored last run.</li>
 <li>The target has a different class than it did before.</li>
@@ -301,77 +280,476 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li>The <code>command</code> metadata field (the hash of the R command) is different from last time.</li>
 <li>The <code>depend</code> metadata field (the hash of the immediate upstream dependency targets and global objects) is different from last time.</li>
 <li>The storage <code>format</code> (user-specified with <code>tar_target()</code> or <code>tar_option_set()</code>) is different from last time.</li>
+<li>The storage <code>repository`` (user-specified with</code>tar_target()<code>or</code>tar_option_set()`) is different from last time.</li>
 <li>The <code>iteration</code> method (user-specified with <code>tar_target()</code> or <code>tar_option_set()</code>) is different from last time.</li>
 <li>A target’s file (either the one in <code>_targets/objects/</code> or a dynamic file) does not exist or changed since last time.</li>
+<li>The target-specific random number generator seed is different from last time.</li>
 </ol>
 <p>A target’s dependencies can include functions, and these functions are tracked for changes using a custom hashing procedure. When a function’s hash changes, the function is considered invalidated, and so are any downstream targets with the <code>depend</code> cue turned on. The <code>targets</code> package computes the hash of a function in the following way.</p>
-<ol style="list-style-type: decimal">
+<ol type="1">
 <li>Deparse the function with <code>targets:::safe_deparse()</code>. This function computes a string representation of the function that removes comments and standardizes whitespace so that trivial changes to formatting do not cue targets to rerun.</li>
 <li>Manually remove any literal pointers from the function string using <code>targets:::mask_pointers()</code>. Such pointers arise from inline compiled C/C++ functions.</li>
 <li>Compute a hash on the preprocessed string above using <code>targets:::digest_chr64()</code>.</li>
 </ol>
 <p>Those functions themselves have dependencies, and those dependencies are detected with <code>codetools::findGlobals()</code>. Dependencies of functions may include other global functions or global objects. If a dependency of a function is invalidated, the function itself is invalidated, and so are any dependent targets with the <code>depend</code> cue turned on.</p>
-</div>
-<div id="databases" class="section level2 hasAnchor" number="2.7">
-<h2><span class="header-section-number">2.7</span> Databases<a href="data.html#databases" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+</section>
+<section id="databases" class="level2" data-number="2.7">
+<h2 data-number="2.7" class="anchored" data-anchor-id="databases"><span class="header-section-number">2.7</span> Databases</h2>
 <p><code>targets</code> manages <code>_targets/meta/progress</code> and <code>_targets/meta/meta</code> with an internal <code>database</code> class, which has methods to read, write, and deduplicate entire datasets as well as row-append records for individual targets. To maximize performance, <code>targets</code> uses <code>fread()</code> and <code>fwrite()</code> from <code>data.table</code> when working with entire databases and <code>base::write()</code> to append individual rows. The <code>database</code> class also supports and internal in-memory cache in order to avoid costly interactions with storage.</p>
 <p>Internal classes <code>progress</code> and <code>meta</code> each have a <code>database</code> object and methods specific to the use case. And for additional safety, the <code>record</code> class encapsulates and validates individual rows of metadata.</p>
 
-</div>
-</div>
-<div style = "background: #1C356D; color: white; padding: 10px 10px 10px 25px; font-size: 1em; width: 100%;">
-  Copyright Eli Lilly and Company
-</div>
-            </section>
 
-          </div>
-        </div>
-      </div>
-<a href="index.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="classes.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
-    </div>
-  </div>
-<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
-<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
-<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
-<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
-<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
-<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
-<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
-<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
-<script>
-gitbook.require(["gitbook"], function(gitbook) {
-gitbook.start({
-"sharing": null,
-"fontsettings": {
-"theme": "white",
-"family": "sans",
-"size": 2
-},
-"edit": {
-"link": "https://github.com/ropensci/targets-design/edit/main/data.Rmd",
-"text": "Edit this chapter"
-},
-"history": {
-"link": "https://github.com/ropensci/targets-design/commits/main/data.Rmd",
-"text": "Chapter edit history"
-},
-"view": {
-"link": null,
-"text": null
-},
-"download": null,
-"search": {
-"engine": "fuse",
-"options": null
-},
-"toc": {
-"collapse": "subsection"
-}
-});
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp("https:\/\/books\.ropensci\.org\/targets-design\/");
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
 });
 </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./index.html" class="pagination-link" aria-label="The targets R Package Design Specification">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">The targets R Package Design Specification</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./classes.html" class="pagination-link" aria-label="Major internal classes">
+        <span class="nav-page-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Major internal classes</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+      &nbsp;
+    </div>   
+    <div class="nav-footer-center">
+<p>How to get help: <a href="https://books.ropensci.org/targets/help.html" class="uri">https://books.ropensci.org/targets/help.html</a><br>Copyright 2024, Eli Lilly and Company</p>
+<div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/ropensci-books/targets-design/edit/main/data.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li></ul></div></div>
+    <div class="nav-footer-right">
+      &nbsp;
+    </div>
+  </div>
+</footer>
 
-</body>
 
-</html>
+
+
+</body></html>

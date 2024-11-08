@@ -1,0 +1,302 @@
+[
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "The targets R Package Design Specification",
+    "section": "",
+    "text": "1 Introduction\nThe targets package is a Make-like pipeline toolkit for Statistics and data science in R. With targets, you can maintain a reproducible workflow without repeating yourself. targets learns how your pipeline fits together, skips costly runtime for tasks that are already up to date, runs only the necessary computation, supports implicit parallel computing, abstracts files as R objects, and shows tangible evidence that the results match the underlying code and data.",
+    "crumbs": [
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>The targets R Package Design Specification</span>"
+    ]
+  },
+  {
+    "objectID": "index.html#design-1",
+    "href": "index.html#design-1",
+    "title": "The targets R Package Design Specification",
+    "section": "1.1 Design",
+    "text": "1.1 Design\ntargets has an elaborate structure to support its advanced features while ensuring decent performance. This bookdown site is a design specification to explain the major aspects of the internal architecture, including the data storage model, object oriented design, and orchestration and branching model.",
+    "crumbs": [
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>The targets R Package Design Specification</span>"
+    ]
+  },
+  {
+    "objectID": "data.html",
+    "href": "data.html",
+    "title": "2  Data and metadata management",
+    "section": "",
+    "text": "2.1 File system\nWhen a targets pipeline runs, it creates a folder called _targets to store all the files it needs. In targets version 0.3.1.9000 and above, users can set the data store path to something other than _targets (see tar_config_set()).\nThe number of files equals the number of targets plus two, which makes projects easier to upload and share among collaborators than drake’s .drake/ cache. (Files in _targets/scratch/ do not count because they can all be safely deleted after tar_make().) However, these files may still be too large and too numerous for code-specific version control systems like Git. For such projects, it may be more appropriate to share caches through external version-aware platforms such as Dropbox, Microsoft OneDrive, and Google Docs.\nThe exception to this data structure is content-addressable storage as explained in the documentation of targets::tar_repository_cas().",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Data and metadata management</span>"
+    ]
+  },
+  {
+    "objectID": "data.html#file-system",
+    "href": "data.html#file-system",
+    "title": "2  Data and metadata management",
+    "section": "",
+    "text": "_targets/ # Configurable with tar_config_set().\n├── meta/\n├────── meta\n├────── process\n├────── progress\n├── objects/\n├────── target1 \n├────── target2\n├────── branching_target_c7bcb4bd\n├────── branching_target_285fb6a9\n├────── branching_target_874ca381\n├── scratch/ # tar_make() deletes this folder after it finishes.\n└── user/ # gittargets users can put custom files here for data version control.",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Data and metadata management</span>"
+    ]
+  },
+  {
+    "objectID": "data.html#targets",
+    "href": "data.html#targets",
+    "title": "2  Data and metadata management",
+    "section": "2.2 Targets",
+    "text": "2.2 Targets\nWith the exception of dynamic files, the return value of each target lives in its own file inside _targets/objects/. The file name is the name of the target, and there is no file extension. The metadata keeps track of the storage format that governs how to read and write the target’s data. The default format is RDS, so if target x has no explicit format, then readRDS(\"_targets/objects/x\") will read the data. (However, we state this just for the sake of understanding. The recommended way to read data is tar_read(), which takes the storage format into account.)",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Data and metadata management</span>"
+    ]
+  },
+  {
+    "objectID": "data.html#process",
+    "href": "data.html#process",
+    "title": "2  Data and metadata management",
+    "section": "2.3 Process",
+    "text": "2.3 Process\nThe file _targets/meta/process is a pipe-separated flat file recording high-level information about the external callr process that orchestrates the targets. In that text file is the process ID, which can be used to check if tar_make() is still running in certain situations. Notably, it helps Shiny developers make apps that allow the user to log out and then resume the session after logging back in.",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Data and metadata management</span>"
+    ]
+  },
+  {
+    "objectID": "data.html#progress",
+    "href": "data.html#progress",
+    "title": "2  Data and metadata management",
+    "section": "2.4 Progress",
+    "text": "2.4 Progress\nThe file _targets/meta/progress is a pipe-separated flat file with the name of each target and it’s current runtime progress (running, built, canceled, or errored). The information in this file helps users keep track of what the pipeline is doing at a given moment. targets periodically appends rows to _targets/meta/progress as the pipeline progresses, so duplicated names usually appear. For any target with duplicated rows in _targets/meta/progress, only the lowest row is valid.\nIn most situations, the progress file can be safely excluded from version control. Functions like tar_graph() use progress information, but it is not essential to the reproducible end product.",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Data and metadata management</span>"
+    ]
+  },
+  {
+    "objectID": "data.html#metadata",
+    "href": "data.html#metadata",
+    "title": "2  Data and metadata management",
+    "section": "2.5 Metadata",
+    "text": "2.5 Metadata\ntargets uses special metadata to decide which targets are up to date and which need to run. The metadata file _targets/meta/meta is a flat file with one row for every target and every global object relevant to the pipeline. targets appends new rows to this file as the pipeline progresses. Unlike drake, the metadata is centralized and compatible with data.table, which makes it far faster to check which targets are up to date. In addition, the metadata system allows targets to check not only for up-to-date targets, but also up-to-date global objects, which makes it easier for the user to understand why a target is outdated.\n_targets/meta/meta has the following columns. Global objects use only the name, type, and data fields.\n\nname: Name of the object or target.\ntype: Class name of the object or target.\ndata: Hash of the global object or the file containing the target’s return value.\ncommand: Hash of the R command to run the target.\ndepend: Composite hash of all the target’s immediate upstream dependencies.\nseed: Random number generator seed of the target. A target seed is unique and deterministically generated from its name.\npath: The file path where the return value is stored. For dynamic files, this field could include multiple character strings.\ntime: Character, hash of the maximum of all the time stamps of the files in path.\nsize: Character, hash of the total file size of all the target’s files in path.\nbytes: Numeric, total file size in bytes of all the target’s files in path.\nformat: Name of the storage format of the target. User-specified with tar_target() or tar_option_set().\niteration: Iteration mode of the target’s value, either \"vector\" or \"list\". User-specified with tar_target() or tar_option_set().\nparent: Name of the parent pattern of the target if the target is a branch.\nchildren: For patterns and branching stems, this field has the names of all the branches and buds. Can contain multiple character strings. Empty for branches and non-branching stems.\nseconds: Runtime of the target in seconds.\nwarnings: Warning messages thrown when the target ran.\nerror: Error message thrown when the target ran.\n\nThese fields are pipe-separated in the flat file. Fields path and children can have multiple character strings, and these character strings are separated by asterisks in storage. (In memory, path and children are list columns.)",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Data and metadata management</span>"
+    ]
+  },
+  {
+    "objectID": "data.html#skipping-up-to-date-targets",
+    "href": "data.html#skipping-up-to-date-targets",
+    "title": "2  Data and metadata management",
+    "section": "2.6 Skipping up-to-date targets",
+    "text": "2.6 Skipping up-to-date targets\ntargets uses the metadata to decide if a target is up to date. The should_run() method of the builder class manages this. A target is outdated if one of the following conditions is met. targets checks these rules in the order given below. There is a special cue class to allow the user to customize / suppress most of these rules.\n\nThere is no metadata record of the target.\nThe target errored last run.\nThe target has a different class than it did before.\nThe cue mode equals \"always\".\nThe cue mode does not equal \"never\".\nThe command metadata field (the hash of the R command) is different from last time.\nThe depend metadata field (the hash of the immediate upstream dependency targets and global objects) is different from last time.\nThe storage format (user-specified with tar_target() or tar_option_set()) is different from last time.\nThe storage repository`` (user-specified withtar_target()ortar_option_set()`) is different from last time.\nThe iteration method (user-specified with tar_target() or tar_option_set()) is different from last time.\nA target’s file (either the one in _targets/objects/ or a dynamic file) does not exist or changed since last time.\nThe target-specific random number generator seed is different from last time.\n\nA target’s dependencies can include functions, and these functions are tracked for changes using a custom hashing procedure. When a function’s hash changes, the function is considered invalidated, and so are any downstream targets with the depend cue turned on. The targets package computes the hash of a function in the following way.\n\nDeparse the function with targets:::safe_deparse(). This function computes a string representation of the function that removes comments and standardizes whitespace so that trivial changes to formatting do not cue targets to rerun.\nManually remove any literal pointers from the function string using targets:::mask_pointers(). Such pointers arise from inline compiled C/C++ functions.\nCompute a hash on the preprocessed string above using targets:::digest_chr64().\n\nThose functions themselves have dependencies, and those dependencies are detected with codetools::findGlobals(). Dependencies of functions may include other global functions or global objects. If a dependency of a function is invalidated, the function itself is invalidated, and so are any dependent targets with the depend cue turned on.",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Data and metadata management</span>"
+    ]
+  },
+  {
+    "objectID": "data.html#databases",
+    "href": "data.html#databases",
+    "title": "2  Data and metadata management",
+    "section": "2.7 Databases",
+    "text": "2.7 Databases\ntargets manages _targets/meta/progress and _targets/meta/meta with an internal database class, which has methods to read, write, and deduplicate entire datasets as well as row-append records for individual targets. To maximize performance, targets uses fread() and fwrite() from data.table when working with entire databases and base::write() to append individual rows. The database class also supports and internal in-memory cache in order to avoid costly interactions with storage.\nInternal classes progress and meta each have a database object and methods specific to the use case. And for additional safety, the record class encapsulates and validates individual rows of metadata.",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Data and metadata management</span>"
+    ]
+  },
+  {
+    "objectID": "classes.html",
+    "href": "classes.html",
+    "title": "3  Major internal classes",
+    "section": "",
+    "text": "3.1 Algorithm class\nAn algorithm in targets is an abstract class that represents how to iterate through the pipeline target by target. Different algorithms describe different kinds of deployment: for example, execution in the main process on the host machine versus parallel execution on a cluster. Every algorithm has a scheduler object and a pipeline object.",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Major internal classes</span>"
+    ]
+  },
+  {
+    "objectID": "classes.html#pipeline-class",
+    "href": "classes.html#pipeline-class",
+    "title": "3  Major internal classes",
+    "section": "3.2 Pipeline class",
+    "text": "3.2 Pipeline class\nA pipeline is a wrapper around a collection of targets, and it is responsible for the initial reasoning about the topology of the pipeline before runtime. Pipelines express their reasoning by producing static graphs and scheduler objects early on. In addition, pipelines contain new buds and branches created dynamically during the pipeline.",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Major internal classes</span>"
+    ]
+  },
+  {
+    "objectID": "classes.html#scheduler-class",
+    "href": "classes.html#scheduler-class",
+    "title": "3  Major internal classes",
+    "section": "3.3 Scheduler class",
+    "text": "3.3 Scheduler class\nWhereas pipelines are responsible for static topology, schedulers are responsible for dynamic topology. Schedulers know\n\nThe upstream and downstream neighbors of each target.\nThe progress of each target, e.g. queued, running, or finished.\nHow many upstream dependencies need to be checked or built before a target is ready to run.\n\nTo meet these responsibilities, the scheduler is composed of three smaller objects:\n\nA graph object.\nA progress object.\nA priority queue.",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Major internal classes</span>"
+    ]
+  },
+  {
+    "objectID": "classes.html#graph-class",
+    "href": "classes.html#graph-class",
+    "title": "3  Major internal classes",
+    "section": "3.4 Graph class",
+    "text": "3.4 Graph class\nThe graph class keeps track of the upstream and downstream neighbors of each target. The scheduler adds edges to the graph when new targets are created dynamically.\nThe graph is implemented as two adjacency lists: one for upstream edges and another for downstream edges. For the purposes of powering a pipeline, we find this low-tech structure to be more efficient than igraph in our situation where we repeatedly query the graph and the number of nodes is small. (Transient igraph objects, however, are created for validation and visualization purposes.)",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Major internal classes</span>"
+    ]
+  },
+  {
+    "objectID": "classes.html#progress-class",
+    "href": "classes.html#progress-class",
+    "title": "3  Major internal classes",
+    "section": "3.5 Progress class",
+    "text": "3.5 Progress class\nThe progress class keeps track of the state of each target: queued, running, skipped, built, outdated, canceled, or errored. To accomplish this, the progress object maintains a counter object for each category.",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Major internal classes</span>"
+    ]
+  },
+  {
+    "objectID": "classes.html#queue-class",
+    "href": "classes.html#queue-class",
+    "title": "3  Major internal classes",
+    "section": "3.6 Queue class",
+    "text": "3.6 Queue class\nThe queue class is a priority queue, essentially a wrapper around a named integer vector of ranks. For targets’ purposes, the rank of a target is the number of unmet dependencies so far, minus a per-target priority value in the interval [0, 1) to control the order in which targets are dequeued. As the pipeline progresses, the queue is checked and modified periodically as dependencies are met. The next target to build is the lowest rank target such that -1L &lt; rank &lt;= 0L. Branches are pushed to the queue when they are dynamically created.",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Major internal classes</span>"
+    ]
+  },
+  {
+    "objectID": "classes.html#counter-class",
+    "href": "classes.html#counter-class",
+    "title": "3  Major internal classes",
+    "section": "3.7 Counter class",
+    "text": "3.7 Counter class\nA counter is an efficient abstraction for keeping track of target membership in a category. A counter stores the number of targets in the category and a hash table with the names of those targets. Counters are used to efficiently keep track of runtime progress (e.g. running, queued, or built) as well membership in the queue.",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Major internal classes</span>"
+    ]
+  },
+  {
+    "objectID": "classes.html#target-class",
+    "href": "classes.html#target-class",
+    "title": "3  Major internal classes",
+    "section": "3.8 Target class",
+    "text": "3.8 Target class\nA target is an abstract class for a step of a pipeline. Each target is a composite of intricate sub-classes that keep track of commands, in-memory dependencies, storage, settings, and some aspects of build behavior. As its name implies, the targets package pushes most of its conceptual complexity to the target level in order to decentralize the architecture and make it much easier to reason about the pipeline as a whole.\nThere are multiple sub-classes of targets, and the different behaviors of different sub-classes drive the orchestration and branching of targets. The inheritance hierarchy is as follows.\n\nTarget\n\nBud\nBuilder\n\nStem\nBranch\n\nPattern",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Major internal classes</span>"
+    ]
+  },
+  {
+    "objectID": "classes.html#stem-class",
+    "href": "classes.html#stem-class",
+    "title": "3  Major internal classes",
+    "section": "3.9 Stem class",
+    "text": "3.9 Stem class\nA stem is the most basic form of target. It is neither a pattern nor part of a pattern. However, it can dynamically create buds to assist with branching.",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Major internal classes</span>"
+    ]
+  },
+  {
+    "objectID": "classes.html#bud-class",
+    "href": "classes.html#bud-class",
+    "title": "3  Major internal classes",
+    "section": "3.10 Bud class",
+    "text": "3.10 Bud class\nA bud is a target that simply contains part of a stem’s value in memory. The purpose of a bud is to serve as a dependency of a branch when a pattern branches over a stem.",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Major internal classes</span>"
+    ]
+  },
+  {
+    "objectID": "classes.html#pattern-class",
+    "href": "classes.html#pattern-class",
+    "title": "3  Major internal classes",
+    "section": "3.11 Pattern class",
+    "text": "3.11 Pattern class\nA pattern is an abstract class responsible for creating new branches and dynamically updating the scheduler. Stems and patterns are the only targets the user manually defines in the pipeline.",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Major internal classes</span>"
+    ]
+  },
+  {
+    "objectID": "classes.html#branch-class",
+    "href": "classes.html#branch-class",
+    "title": "3  Major internal classes",
+    "section": "3.12 Branch class",
+    "text": "3.12 Branch class\nA branch is a target that a pattern creates dynamically at runtime.",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Major internal classes</span>"
+    ]
+  },
+  {
+    "objectID": "classes.html#builder-class",
+    "href": "classes.html#builder-class",
+    "title": "3  Major internal classes",
+    "section": "3.13 Builder class",
+    "text": "3.13 Builder class\nStems and branches have a lot in common: they actually run R commands, and the write the return values to storage. A builder is an abstract class to contain the heavy lifting that stems and branches both do.",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Major internal classes</span>"
+    ]
+  },
+  {
+    "objectID": "classes.html#junction-class",
+    "href": "classes.html#junction-class",
+    "title": "3  Major internal classes",
+    "section": "3.14 Junction class",
+    "text": "3.14 Junction class\nA junction is a manifest of the buds or branches (children) that a stem or pattern dynamically creates, and it depends on the user-specified pattern argument to tar_target(), e.g. tar_target(..., pattern = cross(x, map(y, z))).",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Major internal classes</span>"
+    ]
+  },
+  {
+    "objectID": "composition.html",
+    "href": "composition.html",
+    "title": "4  The composition of target objects",
+    "section": "",
+    "text": "4.1 Overall structure\nTo maximize performance, classes with many instances per workflow are simple environments. Most of these objects lack explicit S3 class attributes, but all of them have formal constructors, helpers, and validators.\nThe following classes define specialized objects for the fields of targets.\nSome types of targets need only some of these objects as fields.\nThe class inheritance hierarchy of targets is below, and the orchestration chapter explains why the package is designed this way.",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>The composition of target objects</span>"
+    ]
+  },
+  {
+    "objectID": "composition.html#overall-structure",
+    "href": "composition.html#overall-structure",
+    "title": "4  The composition of target objects",
+    "section": "",
+    "text": "Command\nSettings\nValue\nMetrics\nStore\nFile\nSubpipeline\nJunction\nCue\n\n\n\n\n\nField\nBuilder\nStem\nBranch\nBud\nPattern\n\n\n\n\nCommand\n✓\n✓\n✓\n✓\n✓\n\n\nSettings\n✓\n✓\n✓\n✓\n✓\n\n\nValue\n✓\n✓\n✓\n✓\n✓\n\n\nMetrics\n✓\n✓\n✓\n\n\n\n\nStore\n✓\n✓\n✓\n\n✓\n\n\nFile\n✓\n✓\n✓\n\n\n\n\nSubpipeline\n✓\n✓\n✓\n\n\n\n\nJunction\n\n✓\n\n\n✓\n\n\nCue\n✓\n✓\n✓\n\n✓\n\n\nPatternview\n\n\n\n\n✓\n\n\n\n\n\nTarget\n\nBud\nBuilder\n\nStem\nBranch\n\nPattern",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>The composition of target objects</span>"
+    ]
+  },
+  {
+    "objectID": "composition.html#classes",
+    "href": "composition.html#classes",
+    "title": "4  The composition of target objects",
+    "section": "4.2 Classes",
+    "text": "4.2 Classes\n\n4.2.1 Command class\nA command object is an abstraction around an R code chunk. It contains an R expression, the names of packages and object dependencies that the expression needs to in order to run, the random seed to run it with, and a string and hash of the expression. The hash is used to help determine if the target is already up to date.\n\n\n4.2.2 Settings class\nA settings object keeps track of the user-defined target-specific configuration settings of the targets, such as the target name, storage format, failure mode, memory management behavior, and branching pattern specification (if applicable).\n\n\n4.2.3 Value class\nThe value class is a layer around a target’s return value. Having a special value object allows us to easily distinguish between two situations:\n\nThe target did not run or load data from storage yet.\nThe target did run, but its expression returned NULL.\n\nWithout a special value class, both (1) and (2) would result in NULL values. But for (1), we have an empty value object instead of NULL.\nIn addition, the value class has sub-classes for different data iteration/aggregation methods. Users can choose either list-like aggregation and slicing or vctrs-powered aggregation and slicing. This functionality comes in handy for branching.",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>The composition of target objects</span>"
+    ]
+  },
+  {
+    "objectID": "composition.html#metrics-class",
+    "href": "composition.html#metrics-class",
+    "title": "4  The composition of target objects",
+    "section": "4.3 Metrics class",
+    "text": "4.3 Metrics class\nA metrics object stores metadata metrics about the instance of a target’s build, including runtime, as well as warnings, error messages, and tracebacks if applicable. Initially, the metrics object is creates as part of a build object, which is returned by a command object when it is run. Very soon after, the metrics and return value are separated out from the build object and placed directly in the target object.\n\n4.3.1 Store class\nA store object describes how a target stores and queries its return value in file system storage. It contains a file object, as well as methods for managing the file, such as reading, writing, and decisions that involve hashes. The user-selected format of the target in settings determines the sub-class of the store.\n\n\n4.3.2 File class\nA file object is an abstraction of a collection of files and directories. It contains the paths, as well as the hash, maximum time stamp, and total storage size of the aggregate. The latter two metrics help decide whether to recompute a computationally expensive hash or trust that the hash is already up to date.\n\n\n4.3.3 Subpipeline\nA subpipeline is not actually a class of its own, it is just a pipeline object with only the direct dependencies of a particular target and no value objects in those dependencies. Its only purpose is to efficiently assist with the mechanics of worker-side dependency retrieval.\n\n\n4.3.4 Junction class\nA junction serves as a branching specification for patterns and a budding specification for stems. It contains the name of the parent pattern or stem, the names of the children (buds or branches), and the names of the dependencies of each bud or branch. The junction is the explicit representation of the user-defined pattern argument of tar_target() combined with the hashes of the available dependencies.\n\n\n4.3.5 Cue class\nA cue object is a collection of rules for deciding whether a target is up to date. targets allows the user to activate or suppress some of these rules to change the conditions under which targets rerun.\n\n\n4.3.6 Patternview class\nA patternview object keeps track of the overall status of a all a pattern’s branches as a group. Its helps make it more efficient to keep track of the progress, runtime, and storage size of an entire pattern.",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>The composition of target objects</span>"
+    ]
+  },
+  {
+    "objectID": "orchestration.html",
+    "href": "orchestration.html",
+    "title": "5  Orchestration",
+    "section": "",
+    "text": "5.1 Decrement the ranks of downstream targets in the priority queue.\nThe conclude() method decrements ranks in the priority queue to signal that downstream neighbors are one step closer to being ready to build. Most targets decrement all their downstream neighbors, but a pattern only decrement the neighbors that branch over it. This behavior for patterns is key because it allows future patterns to quickly define new branches before the current ones even start running, which contributes to parallel efficiency.",
+    "crumbs": [
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Orchestration</span>"
+    ]
+  },
+  {
+    "objectID": "orchestration.html#insert-new-targets-dynamically.",
+    "href": "orchestration.html#insert-new-targets-dynamically.",
+    "title": "5  Orchestration",
+    "section": "5.2 Insert new targets dynamically.",
+    "text": "5.2 Insert new targets dynamically.\ntargets creates new targets dynamically when stems and patterns conclude. To illustrate, let us use the following example pipeline.\n# _targets.R\nlibrary(targets)\nsource(\"functions.R\") # Defines all the functions below prefixed with \"user_\".\nlist(\n  tar_target(data1, user_data1()),\n  tar_target(data2, list(user_data2_slice1(), user_data2_slice2())),\n  tar_target(analysis, user_analyze(data1, data2), pattern = map(data2)),\n  tar_target(validation, user_validate(analysis), pattern = map(analysis)),\n  tar_target(summary, user_summarize(validation)) # Does not map over validation.\n)\nIn prose:\n\nThe data and data2 targets are starting datasets.\nThe analysis target maps over the rows of data2 and performs a statistical analysis on each row. All analyses use the entirety of data1.\nThe validation target maps over the analyses to check each one for correctness.\nThe summary target aggregates and summarizes all the analyses and validations together.\n\nGraphical representation:\n\n\n5.2.1 Insert buds\nUpon conclusion, data2 creates buds to help its downstream neighbor analysis map over it later on. data1 creates no buds because no pattern branches over it.\n\nTo insert the buds, we:\n\nCreate a new junction with the names of the buds to create.\nCreate new bud objects, each containing a slice of data2’s return value.\nInsert the buds into the pipeline object.\n\nWe do not need to update the scheduler because the parent stem of the buds already completed. In other words, buds are born built. They exist as separate data objects in memory, but they have no dedicated storage.\n\n\n5.2.2 Insert branches\nWith the buds in place, the analysis pattern can now create branches that depend on each of the respective buds of data2. After they run, the branches exist as separate data objects in memory and storage. The full aggregated analysis pattern is not needed, so it is never created.\n\nAs soon as these first branches are created, we can create the branches for validation. It does not matter if analysis_5c77a278 and analysis_3439bce3 are both still queued. In addition, as soon as analysis_5c77a278 is built, validation_0f7f2822 can start building regardless of whether analysis_3439bce3 is complete. This is a major source of parallel efficiency.\nNotice that we never draw edges from the validation_* branches to summary. This is because summary does not map over validation, so it automatically takes in all of validation as an entire aggregated pattern. In the prepare() method of summary, validation is constructed from its individual branches kept in memory while it is needed. Unlike the validation_* branches, the aggregated validation pattern does not persist in storage.\n\nThe fine details of the branching algorithm are as follows.\n\nFirst we create a junction to describe the branches we will create based on the user-supplied pattern argument to tar_target().\nCreate and insert those new branches into the pipeline.\nDraw graph edges to connect the branches to their individual upstream dependencies (buds or branches).\nInsert graph edges from the new branches to their parent pattern. Some targets may use the entire pattern in aggregate instead of iterating over individual branches, and this step makes sure all the branches are available for aggregation before a downstream target needs to use the aggregate.\nPush the branches onto the priority queue. The rank for each branch is the number of upstream dependencies that still need to be checked or built. 1. Increment the priority queue ranks of all downstream non-branching targets by the number of new branches just created minus 1. This ensures all the branches complete before any target calls upon the entire aggregate of the pattern.\nRegister the branches as queued in the scheduler.\nPush the pattern itself back onto the queue, where the priority queue rank now equals the number of branches minus a constant between 0 and 1. (The subtracted constant just ensures the pattern gets cleaned up as soon as possible.) This step ensures we revisit the pattern after all the branches are done. At that moment, we decrement the priority queue rank of every downstream target that depends on the entire aggregated pattern (as opposed to just a single branch). This behavior drives implicit aggregation, and it ensures we do not need a special combine() pattern directive to accompany map() and cross().",
+    "crumbs": [
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Orchestration</span>"
+    ]
+  }
+]

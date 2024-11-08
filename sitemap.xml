@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://books.ropensci.org/targets-design/index.html</loc>
+    <lastmod>2024-11-08T15:04:14.201Z</lastmod>
+  </url>
+  <url>
+    <loc>https://books.ropensci.org/targets-design/data.html</loc>
+    <lastmod>2024-11-08T15:04:14.197Z</lastmod>
+  </url>
+  <url>
+    <loc>https://books.ropensci.org/targets-design/classes.html</loc>
+    <lastmod>2024-11-08T15:04:14.197Z</lastmod>
+  </url>
+  <url>
+    <loc>https://books.ropensci.org/targets-design/composition.html</loc>
+    <lastmod>2024-11-08T15:04:14.197Z</lastmod>
+  </url>
+  <url>
+    <loc>https://books.ropensci.org/targets-design/orchestration.html</loc>
+    <lastmod>2024-11-08T15:04:14.205Z</lastmod>
+  </url>
+</urlset>
