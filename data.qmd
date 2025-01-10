@@ -84,7 +84,7 @@ These fields are pipe-separated in the flat file. Fields `path` and `children` c
 1. The `command` metadata field (the hash of the R command) is different from last time.
 1. The `depend` metadata field (the hash of the immediate upstream dependency targets and global objects) is different from last time.
 1. The storage `format` (user-specified with `tar_target()` or `tar_option_set()`) is different from last time.
-1. The storage `repository`` (user-specified with `tar_target()` or `tar_option_set()`) is different from last time.
+1. The storage `repository` (user-specified with `tar_target()` or `tar_option_set()`) is different from last time.
 1. The `iteration` method (user-specified with `tar_target()` or `tar_option_set()`) is different from last time.
 1. A target's file (either the one in `_targets/objects/` or a dynamic file) does not exist or changed since last time.
 1. The target-specific random number generator seed is different from last time.
