@@ -1,4 +1,4 @@
-# The composition of target objects {#composition}
+# The composition of target definition objects {#composition}
 
 Most of the package's conceptual challenges and intricacies are expressed in the `"target"` class, and this decentralization helps `targets` effectively reason about entire pipelines. This chapter describes the classes that form the building blocks of a target.
 
