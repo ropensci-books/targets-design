@@ -242,41 +242,41 @@
   {
     "objectID": "composition.html",
     "href": "composition.html",
-    "title": "4  The composition of target objects",
+    "title": "4  The composition of target definition objects",
     "section": "",
     "text": "4.1 Overall structure\nMost of the package’s conceptual challenges and intricacies are expressed in the \"target\" class, and this decentralization helps targets effectively reason about entire pipelines. This chapter describes the classes that form the building blocks of a target.\nTo maximize performance, classes with many instances per workflow are simple environments. Most of these objects lack explicit S3 class attributes, but all of them have formal constructors, helpers, and validators.\nThe following classes define specialized objects for the fields of targets.\nSome types of targets need only some of these objects as fields.\nThe class inheritance hierarchy of targets is below, and the orchestration chapter explains why the package is designed this way.",
     "crumbs": [
-      "<span class='chapter-number'>4</span>  <span class='chapter-title'>The composition of target objects</span>"
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>The composition of target definition objects</span>"
     ]
   },
   {
     "objectID": "composition.html#overall-structure",
     "href": "composition.html#overall-structure",
-    "title": "4  The composition of target objects",
+    "title": "4  The composition of target definition objects",
     "section": "",
     "text": "Command\nSettings\nValue\nMetrics\nStore\nFile\nSubpipeline\nJunction\nCue\n\n\n\n\n\nField\nBuilder\nStem\nBranch\nBud\nPattern\n\n\n\n\nCommand\n✓\n✓\n✓\n✓\n✓\n\n\nSettings\n✓\n✓\n✓\n✓\n✓\n\n\nValue\n✓\n✓\n✓\n✓\n✓\n\n\nMetrics\n✓\n✓\n✓\n\n\n\n\nStore\n✓\n✓\n✓\n\n✓\n\n\nFile\n✓\n✓\n✓\n\n\n\n\nSubpipeline\n✓\n✓\n✓\n\n\n\n\nJunction\n\n✓\n\n\n✓\n\n\nCue\n✓\n✓\n✓\n\n✓\n\n\nPatternview\n\n\n\n\n✓\n\n\n\n\n\nTarget\n\nBud\nBuilder\n\nStem\nBranch\n\nPattern",
     "crumbs": [
-      "<span class='chapter-number'>4</span>  <span class='chapter-title'>The composition of target objects</span>"
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>The composition of target definition objects</span>"
     ]
   },
   {
     "objectID": "composition.html#classes",
     "href": "composition.html#classes",
-    "title": "4  The composition of target objects",
+    "title": "4  The composition of target definition objects",
     "section": "4.2 Classes",
     "text": "4.2 Classes\n\n4.2.1 Command class\nA command object is an abstraction around an R code chunk. It contains an R expression, the names of packages and object dependencies that the expression needs to in order to run, the random seed to run it with, and a string and hash of the expression. The hash is used to help determine if the target is already up to date.\n\n\n4.2.2 Settings class\nA settings object keeps track of the user-defined target-specific configuration settings of the targets, such as the target name, storage format, failure mode, memory management behavior, and branching pattern specification (if applicable).\n\n\n4.2.3 Value class\nThe value class is a layer around a target’s return value. Having a special value object allows us to easily distinguish between two situations:\n\nThe target did not run or load data from storage yet.\nThe target did run, but its expression returned NULL.\n\nWithout a special value class, both (1) and (2) would result in NULL values. But for (1), we have an empty value object instead of NULL.\nIn addition, the value class has sub-classes for different data iteration/aggregation methods. Users can choose either list-like aggregation and slicing or vctrs-powered aggregation and slicing. This functionality comes in handy for branching.",
     "crumbs": [
-      "<span class='chapter-number'>4</span>  <span class='chapter-title'>The composition of target objects</span>"
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>The composition of target definition objects</span>"
     ]
   },
   {
     "objectID": "composition.html#metrics-class",
     "href": "composition.html#metrics-class",
-    "title": "4  The composition of target objects",
+    "title": "4  The composition of target definition objects",
     "section": "4.3 Metrics class",
     "text": "4.3 Metrics class\nA metrics object stores metadata metrics about the instance of a target’s build, including runtime, as well as warnings, error messages, and tracebacks if applicable. Initially, the metrics object is creates as part of a build object, which is returned by a command object when it is run. Very soon after, the metrics and return value are separated out from the build object and placed directly in the target object.\n\n4.3.1 Store class\nA store object describes how a target stores and queries its return value in file system storage. It contains a file object, as well as methods for managing the file, such as reading, writing, and decisions that involve hashes. The user-selected format of the target in settings determines the sub-class of the store.\n\n\n4.3.2 File class\nA file object is an abstraction of a collection of files and directories. It contains the paths, as well as the hash, maximum time stamp, and total storage size of the aggregate. The latter two metrics help decide whether to recompute a computationally expensive hash or trust that the hash is already up to date.\n\n\n4.3.3 Subpipeline\nA subpipeline is not actually a class of its own, it is just a pipeline object with only the direct dependencies of a particular target and no value objects in those dependencies. Its only purpose is to efficiently assist with the mechanics of worker-side dependency retrieval.\n\n\n4.3.4 Junction class\nA junction serves as a branching specification for patterns and a budding specification for stems. It contains the name of the parent pattern or stem, the names of the children (buds or branches), and the names of the dependencies of each bud or branch. The junction is the explicit representation of the user-defined pattern argument of tar_target() combined with the hashes of the available dependencies.\n\n\n4.3.5 Cue class\nA cue object is a collection of rules for deciding whether a target is up to date. targets allows the user to activate or suppress some of these rules to change the conditions under which targets rerun.\n\n\n4.3.6 Patternview class\nA patternview object keeps track of the overall status of a all a pattern’s branches as a group. Its helps make it more efficient to keep track of the progress, runtime, and storage size of an entire pattern.",
     "crumbs": [
-      "<span class='chapter-number'>4</span>  <span class='chapter-title'>The composition of target objects</span>"
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>The composition of target definition objects</span>"
     ]
   },
   {
